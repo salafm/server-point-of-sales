@@ -17,7 +17,17 @@ class Data extends CI_Controller{
 		$this->load->view('vdata',$data);
 	}
 	
-	function tampilbarang(id){
-	
+	function tampil($id){
+		$where = array('idcabang' => $id);
+		$data = $this->mdata->tampil_barang('barang', $where)->result();
+		$no = 1;
+		foreach($data as $d){
+		echo '<tr><td>'.$no++.'</td>
+		  <td>'.$d->idbarang.'</td>
+		  <td>'.$d->nama.'</td>
+		  <td>'.$d->harga.'</td>
+		  <td>'.$d->stok.'</td>
+		  <td>Delete</td></tr>';
+		}
 	}
 }

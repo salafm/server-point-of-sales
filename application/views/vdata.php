@@ -59,13 +59,13 @@ include 'header.php'
                   <div class="x_title">
                     <h2>Silahkan Pilih Cabang :</h2>
 					<div class="col-md-8 col-sm-8 col-xs-6">
-					<select class="form-control input-sm" onchange="javascript:tampil(this.value)">
+					<select class="form-control input-sm" onchange="javascript:showCustomer(this.value)">
 						<option value="0">--Pilih--</option>
 						<?php foreach($cabang as $c){?>
 						<option value="<?php echo $c->id?>"><?php echo $c->nama?></option> 
 						<?php }?>
 					</select></div>
-					<button class="btn btn-default btn-sm" onclick="tambah()"><span class="fa fa-plus"></span> Tambah Barang</button>
+					<a class="btn btn-default btn-sm" href="<?php echo site_url('data/tampil')?>"><span class="fa fa-plus"></span> Tambah Barang</a>
                     <div class="clearfix"></div>
                   </div>
                   <div class="x_content">	
@@ -81,22 +81,6 @@ include 'header.php'
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
-                          <td>1</td>
-                          <td>Tiger</td>
-                          <td>Nixon</td>
-                          <td>System Architect</td>
-                          <td>Edinburgh</td>
-                          <td>61</td>
-                        </tr>
-                        <tr>
-                          <td>2</td>
-                          <td>Garrett</td>
-                          <td>Winters</td>
-                          <td>Accountant</td>
-                          <td>Tokyo</td>
-                          <td>63</td>
-                        </tr>
                       </tbody>
                     </table>
                 </div>
@@ -119,18 +103,23 @@ include 'header.php'
     <!-- Custom Theme Scripts -->
     <script src="<?php echo base_url('build/js/custom.min.js'); ?>"></script>
 	<script>
-	$('#myTable').DataTable( {
-		responsive: true
-	} );
 	
-	function tampil(id){
-	$.get({
-		url : 'get_customer.php?id='+id,
-		success : function(data){
-			$("#detail_customer").html(data);
+	function showCustomer(id){
+		$.get({
+			url : '<?php echo site_url('data/tampil/');?>'+id,
+			success : function(data){
+				$("tbody").html(data);
 			}
-		})
+		});
 	}
+	
+	$('#myTable').DataTable( {
+		responsive:false,
+		searching:false,
+		paging:false,
+		ordering:false,
+		info:false
+	});
 	</script>
 </body>
 <?php 

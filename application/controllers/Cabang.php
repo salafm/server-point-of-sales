@@ -16,4 +16,24 @@ class Cabang extends CI_Controller{
 		$data['cabang'] = $this->mdata->tampil_cabang()->result();
 		$this->load->view('vcabang',$data);
 	}
+	
+	function savedata()
+    {
+        If( $_SERVER['REQUEST_METHOD']  != 'POST'  ){
+            echo 'method salah';
+        }
+        
+        $id = $this->input->post('id',true);
+        $title = $this->input->post('title',true);
+        
+        $fields = array(
+                    'nama' => $title
+                  );
+        
+        $this->mdata->editsimpan($id,$fields);
+        
+        echo "Successfully saved";
+          
+    }
+
 }

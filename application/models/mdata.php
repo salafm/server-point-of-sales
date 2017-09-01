@@ -5,7 +5,11 @@ class mdata extends CI_Model{
 		return $this->db->get('cabang');
 	}	
 	
-	function tampi_barang($id){
-		return $this->db->get_where('barang', $id);
+	function tampil_barang($table, $where){
+		return $this->db->get_where('barang', $where);
 	}
+	
+	function editsimpan($id,$fields){
+		$this ->db->where('id',$id)->update('cabang',$fields);
+    }
 }

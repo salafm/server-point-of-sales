@@ -79,9 +79,10 @@ include 'header.php'
 					  ?>
                         <tr>
                           <td><?php echo $no++?></td>
-                          <td ondblclick="edit()"><?php echo $c->nama?></td>
-                          <td><?php echo $c->user?></td>
-                          <td><?php echo $c->pass?></td>
+                          <td title="Double click to Edit and press Enter to Save" 
+							  class="edit" id="<?php echo $c->id?>"><?php echo $c->nama?></td>
+                          <td class="edit" id="<?php echo $c->id?>"><?php echo $c->user?></td>
+                          <td class="edit" id="<?php echo $c->id?>"><?php echo $c->pass?></td>
                           <td>Delete</td>
                         </tr>
 					  <?php }?>  
@@ -160,9 +161,36 @@ include 'header.php'
 		responsive: true
 	});
 	
-	function edit(){
-		alert('wow')'
-	}
+	$('.edit').on('dblclick', function() {
+	var id = $(this).attr('id');
+	var $this = $(this);
+	var $input = $('<input>', {
+		value: $this.text(),
+		type: 'text',
+		blur: function() {
+		   $this.text(this.value);
+		},
+		keyup: function(e){
+			if((e.keyCode) === 13){
+				if (confirm('Are you sure you want to save this thing into the database?')){
+					e.preventDefault();
+					var value = $input.val();
+					$.ajax({
+						type: "POST",
+						url:'<?php echo site_url('cabang/savedata')?>',
+						data: {
+							'id':id,
+							'title':value
+						},
+						success: function(response){
+							alert(response);
+						},
+					});
+				}
+			}
+		}
+	}).appendTo( $this.empty() ).focus();
+	});
 	
 	function tambah()
     {
