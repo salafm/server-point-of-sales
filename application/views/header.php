@@ -51,7 +51,7 @@
         <div class="col-md-3 left_col">
           <div class="left_col scroll-view">
             <div class="navbar nav_title" style="border: 0;">
-              <a href="<?php echo site_url('admin')?>" class="site_title""><i class="fa fa-cutlery"></i> Resto<b><i>pos</i></b></a>
+              <a href="<?php echo site_url('home')?>" class="site_title""><i class="fa fa-cutlery"></i> RESTo<b><i>pos</i></b></a>
             </div>
 
             <div class="clearfix"></div>
@@ -89,16 +89,16 @@
 
             <!-- /menu footer buttons -->
             <div class="sidebar-footer hidden-small">
-              <a data-toggle="tooltip" data-placement="top" title="Settings">
-                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
-              </a>
-              <a data-toggle="tooltip" data-placement="top" title="FullScreen">
+              <a data-toggle="tooltip" data-placement="top" title="Layar Penuh" onclick="toggleFullscreen(body)">
                 <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
               </a>
-              <a data-toggle="tooltip" data-placement="top" title="Lock">
-                <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
+              <a data-toggle="tooltip" data-placement="top" title="Profil" href="<?php echo site_url('profil')?>">
+                <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
               </a>
-              <a data-toggle="tooltip" data-placement="top" title="Logout" href="<?php echo site_url('login/logout')?>">
+              <a data-toggle="tooltip" data-placement="top" title="Pengaturan" href="<?php echo site_url('setting');?>">
+                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+              </a>
+              <a data-toggle="tooltip" data-placement="top" title="Keluar" href="<?php echo site_url('login/logout')?>">
                 <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
               </a>
             </div>
@@ -121,15 +121,13 @@
                     <span class=" fa fa-angle-down"></span>
                   </a>
                   <ul class="dropdown-menu dropdown-usermenu pull-right">
-                    <li><a href="javascript:;"> Profile</a></li>
+                    <li><a href="<?php echo site_url('profil')?>"> Profil</a></li>
                     <li>
-                      <a href="javascript:;">
-                        <span class="badge bg-red pull-right">50%</span>
-                        <span>Settings</span>
+                      <a href="<?php echo site_url('setting');?>">
+                        <span>Pengaturan</span>
                       </a>
                     </li>
-                    <li><a href="javascript:;">Help</a></li>
-                    <li><a href="<?php echo site_url('login/logout')?>"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
+                    <li><a href="<?php echo site_url('login/logout')?>"><i class="fa fa-sign-out pull-right"></i> Keluar</a></li>
                   </ul>
                 </li>
 
@@ -205,9 +203,20 @@
     <script src="<?php echo base_url('vendors/moment/min/moment.min.js'); ?>"></script>
     <script src="<?php echo base_url('vendors/bootstrap-daterangepicker/daterangepicker.js'); ?>"></script>
 	<script>
-		function judul(){
-			document.title="Data Barang";
+	function toggleFullscreen(event) {
+	  var element = document.body;
+
+		if (event instanceof HTMLElement) {
+			element = event;
 		}
+
+		var isFullscreen = document.webkitIsFullScreen || document.mozFullScreen || false;
+
+		element.requestFullScreen = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || function () { return false; };
+		document.cancelFullScreen = document.cancelFullScreen || document.webkitCancelFullScreen || document.mozCancelFullScreen || function () { return false; };
+
+		isFullscreen ? document.cancelFullScreen() : element.requestFullScreen();
+	}
 	</script>
 </body>
 </html>

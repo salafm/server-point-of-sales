@@ -32,12 +32,21 @@
     <div>
       <a class="hiddenanchor" id="signup"></a>
       <a class="hiddenanchor" id="signin"></a>
+	  <?php 
+		if((isset($login))=='gagal'){
+			$hidden = '';
+		}
+		else{$hidden='hidden';}
+	  ?>
 
       <div class="login_wrapper">
         <div class="animate form login_form">
           <section class="login_content">
             <form action="<?php echo site_url('login/aksi_login'); ?>" method="post">
               <h1>Masuk ke Sistem</h1>
+			  <div>
+				<p class="<?php echo $hidden; ?> btn-danger">Username atau Password salah</p>
+			  </div>
               <div class="input-group">
                 <input type="text" class="form-control" placeholder="Username" name="username" required="" />
 				<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
@@ -47,7 +56,7 @@
 				<span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
               </div>
               <div>
-                <button class="btn btn-default submit" type="submit" >Masuk</button>
+                <button class="btn btn-default submit" type="submit" id="masuk">Masuk</button>
               </div>
 
               <div class="clearfix"></div>
@@ -61,7 +70,7 @@
                 <br />
 
                 <div>
-                  <h1><i class="fa fa-cutlery"></i> Resto<b><i>pos</i></b></h1>
+                  <h1><i class="fa fa-cutlery"></i> RESTo<b><i>pos</i></b></h1>
                   <p>©2017 Hak Cipta dilindungi Undang-Undang. <b>Restopos</b></p>
                 </div>
               </div>
@@ -78,7 +87,7 @@
 				<span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
               </div>
               <div>
-                <a class="btn btn-default submit" href="index.html">Reset Password</a>
+                <a class="btn btn-default" href="<?php echo site_url('login/masuk'); ?>">Reset Password</a>
 				<a class="btn btn-default submit" href="#signin">Batal</a>
               </div>
 
@@ -90,7 +99,7 @@
                 <br />
 
                 <div>
-                  <h1><i class="fa fa-cutlery"></i> Resto<b><i>pos</i></b></h1>
+                  <h1><i class="fa fa-cutlery"></i> RESTo<b><i>pos</i></b></h1>
                   <p>©2017 Hak Cipta dilindungi Undang-Undang. <b>Restopos</b></p>
                 </div>
               </div>
@@ -99,5 +108,9 @@
         </div>
       </div>
     </div>
+	<!-- jQuery -->
+    <script src="<?php echo base_url('vendors/jquery/dist/jquery.min.js'); ?>"></script>
+    <!-- Bootstrap -->
+    <script src="<?php echo base_url('vendors/bootstrap/dist/js/bootstrap.min.js'); ?>"></script>
   </body>
 </html>

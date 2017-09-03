@@ -9,7 +9,16 @@ class mdata extends CI_Model{
 		return $this->db->get_where('barang', $where);
 	}
 	
-	function editsimpan($id,$fields){
-		$this ->db->where('id',$id)->update('cabang',$fields);
+	function editsimpan($id,$fields,$table){
+		$this->db->where('id',$id)->update($table,$fields);
     }
+	
+	function simpan($table,$data){
+		$this->db->insert($table, $data);
+	}
+	
+	function hapus($id,$table)
+	{
+		$this->db->where('id',$id)->delete($table);
+	}
 }

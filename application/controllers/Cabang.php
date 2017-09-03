@@ -17,23 +17,45 @@ class Cabang extends CI_Controller{
 		$this->load->view('vcabang',$data);
 	}
 	
-	function savedata()
+	public function editsimpan()
     {
         If( $_SERVER['REQUEST_METHOD']  != 'POST'  ){
             echo 'method salah';
         }
         
         $id = $this->input->post('id',true);
-        $title = $this->input->post('title',true);
+        $isi = $this->input->post('isi',true);
+		$kolom =  $this->input->post('kolom',true);
+		$table = $this->input->post('tabel',true);
         
         $fields = array(
-                    'nama' => $title
+                    $kolom => $isi
                   );
         
-        $this->mdata->editsimpan($id,$fields);
+        $this->mdata->editsimpan($id,$fields,$table);
         
-        echo "Successfully saved";
+        echo "Data berhasil disimpan";
           
     }
-
+	
+	function simpancabang()
+	{
+		$nama = $this->input->post('nama',true);
+		$user = $this->input->post('user',true);
+		$pass = $this->input->post('pass',true);
+		$input = array(
+			'nama' => $nama,
+			'user' => $user,
+			'pass' => $pass
+		);
+		
+		$this->mdata->simpan('cabang',$input);
+		echo json_encode(array("status" => TRUE));
+	}
+	
+	function hapus($id)
+	{
+		$this->mdata->hapus($id,'cabang');
+		echo json_encode(array("status" => TRUE));
+	}
 }

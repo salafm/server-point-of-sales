@@ -69,7 +69,7 @@ include 'header.php'
                           <th>Nama Cabang</th>
                           <th>Username</th>
                           <th>Password</th>
-                          <th>Pilihan</th>
+                          <th>Hapus</th>
                         </tr>
                       </thead>
 					  <tbody>
@@ -77,13 +77,16 @@ include 'header.php'
 						$no = 1;
 						foreach($cabang as $c){
 					  ?>
-                        <tr>
+                        <tr id="<?php echo $c->id?>">
                           <td><?php echo $no++?></td>
                           <td title="Double click to Edit and press Enter to Save" 
-							  class="edit" id="<?php echo $c->id?>"><?php echo $c->nama?></td>
-                          <td class="edit" id="<?php echo $c->id?>"><?php echo $c->user?></td>
-                          <td class="edit" id="<?php echo $c->id?>"><?php echo $c->pass?></td>
-                          <td>Delete</td>
+							  class="edit" id="nama"><?php echo $c->nama?></td>
+                          <td title="Double click to Edit and press Enter to Save" 
+							  class="edit" id="user"><?php echo $c->user?></td>
+                          <td title="Double click to Edit and press Enter to Save" 
+						      class="edit" id="pass"><?php echo $c->pass?></td>
+                          <td><button class="btn btn-danger btn-xs" onclick="hapus(<?php echo $c->id;?>)">
+						  <i class="fa fa-remove"></i></button></td>
                         </tr>
 					  <?php }?>  
                       </tbody>
@@ -107,39 +110,32 @@ include 'header.php'
       </div>
       <div class="modal-body form">
         <form action="#" id="form" class="form-horizontal">
-          <input type="hidden" value="" name="book_id"/>
+          <input type="hidden" value="" name="cabang"/>
           <div class="form-body">
             <div class="form-group">
               <label class="control-label col-md-3">Nama Cabang</label>
               <div class="col-md-9">
-                <input name="nama" placeholder="Masukkan nama cabang" class="form-control" type="text">
+                <input name="nama" id="name" placeholder="Masukkan nama cabang" class="form-control" type="text">
               </div>
             </div>
             <div class="form-group">
               <label class="control-label col-md-3">Username</label>
               <div class="col-md-9">
-                <input name="user" placeholder="Masukkan username" class="form-control" type="text">
+                <input name="user" id="users" placeholder="Masukkan username" class="form-control" type="text">
               </div>
             </div>
             <div class="form-group">
               <label class="control-label col-md-3">Password</label>
               <div class="col-md-9">
-				<input name="pass" placeholder="Masukkan password" class="form-control" type="text">
+				<input name="pass" id="passw" placeholder="Masukkan password" class="form-control" type="text">
               </div>
             </div>
-			<div class="form-group">
-				<label class="control-label col-md-3">Ip Address</label>
-				<div class="col-md-9">
-					<input name="ip" placeholder="Isi Ip Address" class="form-control" type="text">
-
-				</div>
-			</div>
           </div>
         </form>
           </div>
           <div class="modal-footer">
-            <button type="button" id="btnSave" onclick="save()" class="btn btn-default">Save</button>
-            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <a type="button" id="btnSave" onclick="simpan()" class="btn btn-default disabled">Simpan</a>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
           </div>
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
@@ -161,26 +157,53 @@ include 'header.php'
 		responsive: true
 	});
 	
+	$(document).ready(function(){	
+		$("#name, #users, #passw").on('input', function() {
+			var nama = document.getElementById('name').value;
+			var user = document.getElementById('users').value;
+			var pass = document.getElementById('passw').value;
+			if(nama!=='' && user!=='' && pass!==''){
+				document.getElementById('btnSave').setAttribute('class','btn btn-default');
+			}
+			else{
+				document.getElementById('btnSave').setAttribute('class','btn btn-default disabled');
+			}
+		});
+	});
+	
 	$('.edit').on('dblclick', function() {
-	var id = $(this).attr('id');
+	var ok = 0;
+	var id = $(this).closest('tr').prop('id');
+	var kolom = $(this).attr('id');
+	var teks = $(this).html();
 	var $this = $(this);
 	var $input = $('<input>', {
 		value: $this.text(),
 		type: 'text',
 		blur: function() {
-		   $this.text(this.value);
+		   if (ok == 1)
+		   {
+			$this.text(this.value);
+			}
+			else{
+				$this.text(teks);
+				alert('Data belum tersimpan, tekan Enter untuk menyimpan');
+			}
 		},
 		keyup: function(e){
 			if((e.keyCode) === 13){
-				if (confirm('Are you sure you want to save this thing into the database?')){
+				if (confirm('Apa anda yakin ingin menyimpannya?')){
+					ok = 1;
 					e.preventDefault();
 					var value = $input.val();
 					$.ajax({
 						type: "POST",
-						url:'<?php echo site_url('cabang/savedata')?>',
+						url:'<?php echo site_url('cabang/editsimpan')?>',
 						data: {
 							'id':id,
-							'title':value
+							'isi':value,
+							'kolom':kolom,
+							'tabel':'cabang'
 						},
 						success: function(response){
 							alert(response);
@@ -188,16 +211,58 @@ include 'header.php'
 					});
 				}
 			}
-		}
+		}		
 	}).appendTo( $this.empty() ).focus();
 	});
 	
 	function tambah()
     {
-      save_method = 'add';
-      $('#form')[0].reset(); // reset form on modals
-      $('#modal_form').modal('show'); // show bootstrap modal
-    //$('.modal-title').text('Add Person'); // Set Title to Bootstrap modal title
+	  document.getElementById('btnSave').setAttribute('class','btn btn-default disabled');
+      $('#form')[0].reset();
+      $('#modal_form').modal('show'); 
+    }
+	
+	function simpan()
+    {
+	 $.ajax({
+		url : '<?php echo site_url('cabang/simpancabang')?>',
+		type: "POST",
+		data: $('#form').serialize(),
+		dataType: "JSON",
+		success: function(response)
+		{
+		   $('#modal_form').modal('hide');
+		   alert('Berhasil menambahkan data');
+		   location.reload();
+		},
+		error: function (jqXHR, textStatus, errorThrown)
+		{
+			alert('Gagal menambahkan data');
+		}
+	});
+    }
+	
+	function hapus(id)
+    {
+      if(confirm('Apa anda yakin akan menghapus data ini?'))
+      {
+        // ajax delete data from database
+          $.ajax({
+            url : "<?php echo site_url('cabang/hapus')?>/"+id,
+            type: "POST",
+            dataType: "JSON",
+            success: function(data)
+            {
+               alert('Data berhasil dihapus');
+               location.reload();
+            },
+            error: function (jqXHR, textStatus, errorThrown)
+            {
+                alert('Gagal menghapus data');
+            }
+        });
+ 
+      }
     }
 	</script>
 </body>

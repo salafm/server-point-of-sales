@@ -13,8 +13,8 @@ class Login extends CI_Controller{
 	}
 	
 	function aksi_login(){
-		$user = $this->input->post('username');
-		$pass = $this->input->post('password');
+		$user = $this->input->post('username',true);
+		$pass = $this->input->post('password',true);
 		$where = array(
 			'user' => $user,
 			'pass' => $pass
@@ -31,7 +31,8 @@ class Login extends CI_Controller{
 			redirect(site_url("home"));
 
 		}else{
-			echo "Username dan password salah !";
+			$data['login'] = 'gagal';
+			$this->load->view('vlogin',$data);
 		}
 	}
 	

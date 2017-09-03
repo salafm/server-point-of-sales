@@ -59,13 +59,13 @@ include 'header.php'
                   <div class="x_title">
                     <h2>Silahkan Pilih Cabang :</h2>
 					<div class="col-md-8 col-sm-8 col-xs-6">
-					<select class="form-control input-sm" onchange="javascript:showCustomer(this.value)">
-						<option value="0">--Pilih--</option>
+					<select id="pil" class="form-control input-sm" onchange="javascript:showCustomer(this.value)">
+						<option value="0" selected>--Pilih--</option>
 						<?php foreach($cabang as $c){?>
 						<option value="<?php echo $c->id?>"><?php echo $c->nama?></option> 
 						<?php }?>
 					</select></div>
-					<a class="btn btn-default btn-sm" href="<?php echo site_url('data/tampil')?>"><span class="fa fa-plus"></span> Tambah Barang</a>
+					<a class="btn btn-default btn-sm disabled" onclick="tambah()" id="tombol"><span class="fa fa-plus"></span> Tambah Barang</a>
                     <div class="clearfix"></div>
                   </div>
                   <div class="x_content">	
@@ -77,7 +77,8 @@ include 'header.php'
                           <th>Deskripsi</th>
                           <th>Harga</th>
                           <th>Stok</th>
-                          <th>Pilihan</th>
+                          <th>Satuan</th>
+                          <th>Hapus</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -91,6 +92,61 @@ include 'header.php'
 		</div>
 	  </div>
 	</div>
+	
+		<!-- Bootstrap modal -->
+  <div class="modal fade" id="modal_form" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h3 class="modal-title"></h3>
+      </div>
+      <div class="modal-body form">
+        <form action="#" id="form" class="form-horizontal">
+          <input type="hidden" value="" name="barang"/>
+          <div class="form-body">
+            <div class="form-group">
+              <label class="control-label col-md-3">Id Barang</label>
+              <div class="col-md-9">
+                <input name="idbarang" id="1" placeholder="Masukkan id barang" class="form-control" type="text">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-md-3">Nama Barang</label>
+              <div class="col-md-9">
+                <input name="nama" id="2" placeholder="Masukkan nama barang" class="form-control" type="text">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-md-3">Harga</label>
+              <div class="col-md-9">
+				<input name="harga" id="3" placeholder="Masukkan harga barang" class="form-control" type="text">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-md-3">Stock</label>
+              <div class="col-md-9">
+				<input name="stok" id="4" placeholder="Masukkan jumlah persediaan barang" class="form-control" type="text">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-md-3">Satuan</label>
+              <div class="col-md-9">
+				<input name="satuan" id="5" placeholder="kg, pack, sachet, dll" class="form-control" type="text">
+              </div>
+            </div>
+          </div>
+        </form>
+          </div>
+          <div class="modal-footer">
+            <a type="button" id="btnSave" class="btn btn-default">Simpan</a>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+  <!-- End Bootstrap modal -->
+  
 	<!-- Datatables -->
     <script src="<?php echo base_url('vendors/datatables.net/js/jquery.dataTables.min.js'); ?>"></script>
     <script src="<?php echo base_url('vendors/datatables.net-bs/js/dataTables.bootstrap.min.js'); ?>"></script>
@@ -104,22 +160,146 @@ include 'header.php'
     <script src="<?php echo base_url('build/js/custom.min.js'); ?>"></script>
 	<script>
 	
+	$('#myTable').dataTable({
+		responsive:true
+	});
+	
 	function showCustomer(id){
+		if(id!=0){
+			document.getElementById('tombol').setAttribute('class','btn btn-default btn-sm');
+		}
+		else{
+			document.getElementById('tombol').setAttribute('class','btn btn-default btn-sm disabled');
+			document.getElementById('tombol').setAttribute('onclick','btn btn-default btn-sm disabled');
+		}
 		$.get({
 			url : '<?php echo site_url('data/tampil/');?>'+id,
 			success : function(data){
-				$("tbody").html(data);
+				$('#myTable').DataTable().destroy();
+				$('tbody').html(data);
+				$(document).ready(function() {
+					$('#myTable').dataTable({
+						responsive:true
+					});
+				} );
 			}
 		});
 	}
 	
-	$('#myTable').DataTable( {
-		responsive:false,
-		searching:false,
-		paging:false,
-		ordering:false,
-		info:false
+	$(document).ready(function(){	
+		$("#1, #2, #3, #4, #5").on('input', function() {
+			var nama = document.getElementById('1').value;
+			var user = document.getElementById('2').value;
+			var pass = document.getElementById('3').value;
+			var pass1 = document.getElementById('4').value;
+			var pass2 = document.getElementById('5').value;
+			if(nama!=='' && user!=='' && pass!=='' && pass1!=='' && pass2!==''){
+				document.getElementById('btnSave').setAttribute('class','btn btn-default');
+			}
+			else{
+				document.getElementById('btnSave').setAttribute('class','btn btn-default disabled');
+			}
+		});
 	});
+	
+	function tambah()
+    {
+		var e = document.getElementById("pil");
+		var value = e.options[e.selectedIndex].value;
+		var teks = e.options[e.selectedIndex].innerHTML;
+		document.getElementById('btnSave').setAttribute('class','btn btn-default disabled');
+		document.getElementById('btnSave').setAttribute('onclick','simpan('+value+')');
+		$('#form')[0].reset();
+        $('#modal_form').modal('show');
+		$('.modal-title').text('Tambah Barang di '+teks);
+    }
+	
+	function simpan(id)
+    {
+	 $.ajax({
+		url : '<?php echo site_url('data/simpanbarang/');?>'+id,
+		type: "POST",
+		data: $('#form').serialize(),
+		dataType: "JSON",
+		success: function(response)
+		{
+		   $('#modal_form').modal('hide');
+		   alert('Berhasil menambahkan data');
+		   location.reload();
+		},
+		error: function (jqXHR, textStatus, errorThrown)
+		{
+			alert('Gagal menambahkan data');
+		}
+	});
+    }
+	
+	$(document).on('dblclick', '.edit' ,function() {
+	var ok = 0;
+	var id = $(this).closest('tr').prop('id');
+	var kolom = $(this).attr('id');
+	var teks = $(this).html();
+	var $this = $(this);
+	var $input = $('<input>', {
+		value: $this.text(),
+		type: 'text',
+		blur: function() {
+		   if (ok == 1)
+		   {
+			$this.text(this.value);
+			}
+			else{
+				$this.text(teks);
+				alert('Data belum tersimpan, tekan Enter untuk menyimpan');
+			}
+		},
+		keyup: function(e){
+			if((e.keyCode) === 13){
+				if (confirm('Apa anda yakin ingin menyimpannya?')){
+					ok = 1;
+					e.preventDefault();
+					var value = $input.val();
+					$.ajax({
+						type: "POST",
+						url:'<?php echo site_url('cabang/editsimpan')?>',
+						data: {
+							'id':id,
+							'isi':value,
+							'kolom':kolom,
+							'tabel':'barang'
+						},
+						success: function(response){
+							alert(response);
+						},
+					});
+				}
+			}
+		}		
+	}).appendTo( $this.empty() ).focus();
+	});
+	
+	function hapus(id)
+    {
+      if(confirm('Apa anda yakin akan menghapus data ini?'))
+      {
+        // ajax delete data from database
+          $.ajax({
+            url : "<?php echo site_url('data/hapus')?>/"+id,
+            type: "POST",
+            dataType: "JSON",
+            success: function(data)
+            {
+               alert('Data berhasil dihapus');
+               location.reload();
+            },
+            error: function (jqXHR, textStatus, errorThrown)
+            {
+                alert('Gagal menghapus data');
+            }
+        });
+ 
+      }
+    }
 	</script>
 </body>
 <?php 

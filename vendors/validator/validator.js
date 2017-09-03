@@ -16,20 +16,20 @@ var validator = (function($){
     */
     message = {
         invalid         : 'invalid input',
-        checked         : 'must be checked',
-        empty           : 'please put something here',
-        min             : 'input is too short',
-        max             : 'input is too long',
-        number_min      : 'too low',
-        number_max      : 'too high',
+        checked         : 'pilih salah satu',
+        empty           : 'isi isian ini',
+        min             : 'input terlalu pendek',
+        max             : 'input terlalu panjang',
+        number_min      : 'nilai terlalu rendah',
+        number_max      : 'nilai terlalu tinggi',
         url             : 'invalid URL',
         number          : 'not a number',
-        email           : 'email address is invalid',
-        email_repeat    : 'emails do not match',
-        password_repeat : 'passwords do not match',
-        repeat          : 'no match',
-        complete        : 'input is not complete',
-        select          : 'Please select an option'
+        email           : 'format email salah',
+        email_repeat    : 'email tidak sama',
+        password_repeat : 'passwords tidak sama',
+        repeat          : 'tidak sama',
+        complete        : 'input belum lengkap',
+        select          : 'pilih salah satu'
     };
 
     if(!window.console){
