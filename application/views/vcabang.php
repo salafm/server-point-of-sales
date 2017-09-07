@@ -21,7 +21,7 @@ include 'header.php'
     <link href="<?php echo base_url('vendors/nprogress/nprogress.css'); ?>" rel="stylesheet">
     <!-- iCheck -->
     <link href="<?php echo base_url('vendors/iCheck/skins/flat/green.css'); ?>" rel="stylesheet">
-	
+
     <!-- bootstrap-progressbar -->
     <link href="<?php echo base_url('vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css'); ?>" rel="stylesheet">
     <!-- JQVMap -->
@@ -42,7 +42,7 @@ include 'header.php'
   <body class="nav-md">
     <div class="container body">
       <div class="main_container">
-	  
+
          <!-- page content -->
 		 <div class="right_col" role="main">
           <div class="">
@@ -50,9 +50,9 @@ include 'header.php'
               <div class="title_left">
                 <h3>Database <small>Cabang</small></h3>
               </div>
-            </div> 
+            </div>
 			<div class="clearfix"></div>
-			
+
 			<div class="row">
 			<div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
@@ -61,7 +61,7 @@ include 'header.php'
                     <div class="clearfix"></div>
                   </div>
                   <div class="x_content">
-					
+
                     <table id="myTable" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
                       <thead>
                         <tr>
@@ -79,27 +79,27 @@ include 'header.php'
 					  ?>
                         <tr id="<?php echo $c->id?>">
                           <td><?php echo $no++?></td>
-                          <td title="Double click to Edit and press Enter to Save" 
+                          <td title="Double click untuk edit and tekan Enter to menyimpan"
 							  class="edit" id="nama"><?php echo $c->nama?></td>
-                          <td title="Double click to Edit and press Enter to Save" 
-							  class="edit" id="user"><?php echo $c->user?></td>
-                          <td title="Double click to Edit and press Enter to Save" 
-						      class="edit" id="pass"><?php echo $c->pass?></td>
+                          <td title="Kolom ini tidak bisa diedit"
+							  class="" id="user"><?php echo $c->user?></td>
+                          <td title="Kolom ini tidak bisa diedit"
+						      class="" id="pass"><?php echo $c->pass?></td>
                           <td><button class="btn btn-danger btn-xs" onclick="hapus(<?php echo $c->id;?>)">
 						  <i class="fa fa-remove"></i></button></td>
                         </tr>
-					  <?php }?>  
+					  <?php }?>
                       </tbody>
                     </table>
                 </div>
               </div>
-			 </div> 
+			 </div>
 		   </div>
          </div>
 		</div>
 	  </div>
 	</div>
-	
+
 	<!-- Bootstrap modal -->
   <div class="modal fade" id="modal_form" role="dialog">
   <div class="modal-dialog">
@@ -121,7 +121,7 @@ include 'header.php'
             <div class="form-group">
               <label class="control-label col-md-3">Username</label>
               <div class="col-md-9">
-                <input name="user" id="users" placeholder="Masukkan username" class="form-control" type="text">
+                <input name="user" id="users" placeholder="Username tidak boleh sama dengan yg lain" class="form-control" type="text">
               </div>
             </div>
             <div class="form-group">
@@ -156,8 +156,8 @@ include 'header.php'
 	$('#myTable').DataTable( {
 		responsive: true
 	});
-	
-	$(document).ready(function(){	
+
+	$(document).ready(function(){
 		$("#name, #users, #passw").on('input', function() {
 			var nama = document.getElementById('name').value;
 			var user = document.getElementById('users').value;
@@ -170,7 +170,7 @@ include 'header.php'
 			}
 		});
 	});
-	
+
 	$('.edit').on('dblclick', function() {
 	var ok = 0;
 	var id = $(this).closest('tr').prop('id');
@@ -181,6 +181,7 @@ include 'header.php'
 		value: $this.text(),
 		type: 'text',
 		blur: function() {
+      clearSelection();
 		   if (ok == 1)
 		   {
 			$this.text(this.value);
@@ -211,17 +212,17 @@ include 'header.php'
 					});
 				}
 			}
-		}		
+		}
 	}).appendTo( $this.empty() ).focus();
 	});
-	
+
 	function tambah()
     {
 	  document.getElementById('btnSave').setAttribute('class','btn btn-default disabled');
       $('#form')[0].reset();
-      $('#modal_form').modal('show'); 
+      $('#modal_form').modal('show');
     }
-	
+
 	function simpan()
     {
 	 $.ajax({
@@ -241,7 +242,7 @@ include 'header.php'
 		}
 	});
     }
-	
+
 	function hapus(id)
     {
       if(confirm('Apa anda yakin akan menghapus data ini?'))
@@ -261,12 +262,21 @@ include 'header.php'
                 alert('Gagal menghapus data');
             }
         });
- 
+
       }
     }
+
+  function clearSelection() {
+    if(document.selection && document.selection.empty) {
+        document.selection.empty();
+    } else if(window.getSelection) {
+        var sel = window.getSelection();
+        sel.removeAllRanges();
+    }
+  }
 	</script>
 </body>
-<?php 
+<?php
 include 'footer.html'
 ?>
 </html>

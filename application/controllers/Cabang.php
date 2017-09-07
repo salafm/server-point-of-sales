@@ -5,39 +5,39 @@ class Cabang extends CI_Controller{
 	function __construct(){
 		parent::__construct();
 		$this->load->model('mdata');
-		
+
 		if($this->session->userdata('status') != "login"){
 			redirect(site_url("login"));
 		}
 	}
-	
+
 	function index(){
 		$data['judul'] = 'Database Cabang';
 		$data['cabang'] = $this->mdata->tampil_cabang()->result();
 		$this->load->view('vcabang',$data);
 	}
-	
+
 	public function editsimpan()
     {
         If( $_SERVER['REQUEST_METHOD']  != 'POST'  ){
             echo 'method salah';
         }
-        
+
         $id = $this->input->post('id',true);
         $isi = $this->input->post('isi',true);
-		$kolom =  $this->input->post('kolom',true);
-		$table = $this->input->post('tabel',true);
-        
+				$kolom =  $this->input->post('kolom',true);
+				$table = $this->input->post('tabel',true);
+
         $fields = array(
                     $kolom => $isi
                   );
-        
+
         $this->mdata->editsimpan($id,$fields,$table);
-        
+
         echo "Data berhasil disimpan";
-          
+
     }
-	
+
 	function simpancabang()
 	{
 		$nama = $this->input->post('nama',true);
@@ -48,11 +48,11 @@ class Cabang extends CI_Controller{
 			'user' => $user,
 			'pass' => $pass
 		);
-		
+
 		$this->mdata->simpan('cabang',$input);
 		echo json_encode(array("status" => TRUE));
 	}
-	
+
 	function hapus($id)
 	{
 		$this->mdata->hapus($id,'cabang');

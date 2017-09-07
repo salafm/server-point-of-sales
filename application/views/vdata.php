@@ -21,7 +21,7 @@ include 'header.php'
     <link href="<?php echo base_url('vendors/nprogress/nprogress.css'); ?>" rel="stylesheet">
     <!-- iCheck -->
     <link href="<?php echo base_url('vendors/iCheck/skins/flat/green.css'); ?>" rel="stylesheet">
-	
+
     <!-- bootstrap-progressbar -->
     <link href="<?php echo base_url('vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css'); ?>" rel="stylesheet">
     <!-- JQVMap -->
@@ -42,7 +42,7 @@ include 'header.php'
   <body class="nav-md">
     <div class="container body">
       <div class="main_container">
-	  
+
          <!-- page content -->
 		 <div class="right_col" role="main">
           <div class="">
@@ -50,25 +50,25 @@ include 'header.php'
               <div class="title_left">
                 <h3>Database<small> Barang</small></h3>
               </div>
-            </div> 
+            </div>
 			<div class="clearfix"></div>
-			
+
 			<div class="row">
 			<div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title">
                     <h2>Silahkan Pilih Cabang :</h2>
 					<div class="col-md-8 col-sm-8 col-xs-6">
-					<select id="pil" class="form-control input-sm" onchange="javascript:showCustomer(this.value)">
+					<select id="pil" class="form-control input-sm" onchange="javascript:lihatbarang(this.value)">
 						<option value="0" selected>--Pilih--</option>
 						<?php foreach($cabang as $c){?>
-						<option value="<?php echo $c->id?>"><?php echo $c->nama?></option> 
+						<option value="<?php echo $c->id?>"><?php echo $c->nama?></option>
 						<?php }?>
 					</select></div>
 					<a class="btn btn-default btn-sm disabled" onclick="tambah()" id="tombol"><span class="fa fa-plus"></span> Tambah Barang</a>
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">	
+                  <div class="x_content">
                     <table id="myTable" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
                       <thead>
                         <tr>
@@ -86,13 +86,13 @@ include 'header.php'
                     </table>
                 </div>
               </div>
-			 </div> 
+			 </div>
 		   </div>
          </div>
 		</div>
 	  </div>
 	</div>
-	
+
 		<!-- Bootstrap modal -->
   <div class="modal fade" id="modal_form" role="dialog">
   <div class="modal-dialog">
@@ -146,7 +146,7 @@ include 'header.php'
       </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
   <!-- End Bootstrap modal -->
-  
+
 	<!-- Datatables -->
     <script src="<?php echo base_url('vendors/datatables.net/js/jquery.dataTables.min.js'); ?>"></script>
     <script src="<?php echo base_url('vendors/datatables.net-bs/js/dataTables.bootstrap.min.js'); ?>"></script>
@@ -159,12 +159,12 @@ include 'header.php'
     <!-- Custom Theme Scripts -->
     <script src="<?php echo base_url('build/js/custom.min.js'); ?>"></script>
 	<script>
-	
+
 	$('#myTable').dataTable({
 		responsive:true
 	});
-	
-	function showCustomer(id){
+
+	function lihatbarang(id){
 		if(id!=0){
 			document.getElementById('tombol').setAttribute('class','btn btn-default btn-sm');
 		}
@@ -185,8 +185,8 @@ include 'header.php'
 			}
 		});
 	}
-	
-	$(document).ready(function(){	
+
+	$(document).ready(function(){
 		$("#1, #2, #3, #4, #5").on('input', function() {
 			var nama = document.getElementById('1').value;
 			var user = document.getElementById('2').value;
@@ -201,7 +201,7 @@ include 'header.php'
 			}
 		});
 	});
-	
+
 	function tambah()
     {
 		var e = document.getElementById("pil");
@@ -213,7 +213,7 @@ include 'header.php'
         $('#modal_form').modal('show');
 		$('.modal-title').text('Tambah Barang di '+teks);
     }
-	
+
 	function simpan(id)
     {
 	 $.ajax({
@@ -233,7 +233,7 @@ include 'header.php'
 		}
 	});
     }
-	
+
 	$(document).on('dblclick', '.edit' ,function() {
 	var ok = 0;
 	var id = $(this).closest('tr').prop('id');
@@ -244,6 +244,7 @@ include 'header.php'
 		value: $this.text(),
 		type: 'text',
 		blur: function() {
+      clearSelection();
 		   if (ok == 1)
 		   {
 			$this.text(this.value);
@@ -274,10 +275,10 @@ include 'header.php'
 					});
 				}
 			}
-		}		
+		}
 	}).appendTo( $this.empty() ).focus();
 	});
-	
+
 	function hapus(id)
     {
       if(confirm('Apa anda yakin akan menghapus data ini?'))
@@ -297,12 +298,21 @@ include 'header.php'
                 alert('Gagal menghapus data');
             }
         });
- 
+
+      }
+    }
+
+    function clearSelection() {
+      if(document.selection && document.selection.empty) {
+          document.selection.empty();
+      } else if(window.getSelection) {
+          var sel = window.getSelection();
+          sel.removeAllRanges();
       }
     }
 	</script>
 </body>
-<?php 
+<?php
 include 'footer.html'
 ?>
 </html>
