@@ -2,7 +2,7 @@
 
 class mdata extends CI_Model{
 
-  function cabang()
+  function apicabang()
   {
     $hasil = $this->db->query('select user, pass from cabang')->result();
     foreach ($hasil as $h ) {
@@ -12,6 +12,16 @@ class mdata extends CI_Model{
       $pass[] = $h->pass;
     }
     return $result = array_combine($user,$pass);
+  }
+
+  function apiip()
+  {
+    $hasil = $this->db->query('select ip from cabang')->result();
+    $ip = '';
+    foreach ($hasil as $h ) {
+      $ip = $ip.$h->ip.',';
+    }
+    return $ip;
   }
 
 	function tampil_cabang(){

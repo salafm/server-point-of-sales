@@ -21,7 +21,7 @@ include 'header.php'
     <link href="<?php echo base_url('vendors/nprogress/nprogress.css'); ?>" rel="stylesheet">
     <!-- iCheck -->
     <link href="<?php echo base_url('vendors/iCheck/skins/flat/green.css'); ?>" rel="stylesheet">
-	
+
     <!-- bootstrap-progressbar -->
     <link href="<?php echo base_url('vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css'); ?>" rel="stylesheet">
     <!-- JQVMap -->
@@ -36,7 +36,7 @@ include 'header.php'
   <body class="nav-md">
     <div class="container body">
       <div class="main_container">
-	  
+
          <!-- page content -->
         <div class="right_col" role="main">
           <!-- top tiles -->
@@ -79,7 +79,7 @@ include 'header.php'
     <!-- Custom Theme Scripts -->
     <script src="<?php echo base_url('build/js/custom.min.js'); ?>"></script>
 </body>
-<?php 
+<?php
 include 'footer.html'
 ?>
 </html>

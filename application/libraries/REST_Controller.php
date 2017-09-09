@@ -1919,7 +1919,7 @@ abstract class REST_Controller extends CI_Controller {
         $auth_source = strtolower($this->config->item('auth_source'));
         $rest_auth = strtolower($this->config->item('rest_auth'));
         $this->load->model('mdata');
-        $valid_logins = $this->mdata->cabang();
+        $valid_logins = $this->mdata->apicabang();
 
         if ( ! $this->config->item('auth_source') && $rest_auth === 'digest')
         {
@@ -2109,9 +2109,10 @@ abstract class REST_Controller extends CI_Controller {
      */
     protected function _check_whitelist_auth()
     {
-        $whitelist = explode(',', $this->config->item('rest_ip_whitelist'));
+        $this->load->model('mdata');
+        $whitelist = explode(',', $this->mdata->apiip());
 
-        array_push($whitelist, '127.0.0.1', '0.0.0.0');
+        array_push($whitelist, '::1', '127.0.0.1', '0.0.0.0');
 
         foreach ($whitelist as &$ip)
         {

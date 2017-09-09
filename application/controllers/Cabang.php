@@ -43,10 +43,12 @@ class Cabang extends CI_Controller{
 		$nama = $this->input->post('nama',true);
 		$user = $this->input->post('user',true);
 		$pass = $this->input->post('pass',true);
+		$ip = $this->input->post('ip',true);
 		$input = array(
 			'nama' => $nama,
 			'user' => $user,
-			'pass' => $pass
+			'pass' => $pass,
+			'ip' => $ip
 		);
 
 		$this->mdata->simpan('cabang',$input);

@@ -16,17 +16,17 @@ class Api extends REST_Controller
     $this->config->load('rest');
   }
 
-  function cabang_get()
+  function barang_get()
   {
-    $valid_logins = $this->mdata->cabang();
     $id = $this->get('id');
-    if ($id == ''){
-      $cabang = $this->mdata->tampil_cabang()->result();
-    }
-    else {
-      $cabang = $this->db->where('id',$id)->get('cabang')->result();
-    }
-
+    $cabang = $this->db->where('idcabang',$id)->get('barang')->result();
     $this->response($cabang, 200);
+  }
+
+  function cabangid_get()
+  {
+    $user = $this->get('user');
+    $id = $this->db->query('select id from cabang where user = "'.$user.'"')->result();
+    $this->response($id,200);
   }
 }

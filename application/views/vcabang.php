@@ -69,6 +69,8 @@ include 'header.php'
                           <th>Nama Cabang</th>
                           <th>Username</th>
                           <th>Password</th>
+                          <th>IP Address</th>
+                          <th>Waktu dibuat</th>
                           <th>Hapus</th>
                         </tr>
                       </thead>
@@ -85,6 +87,10 @@ include 'header.php'
 							  class="" id="user"><?php echo $c->user?></td>
                           <td title="Kolom ini tidak bisa diedit"
 						      class="" id="pass"><?php echo $c->pass?></td>
+                            <td title="Kolom ini tidak bisa diedit"
+  						      class="" id="pass"><?php echo $c->ip?></td>
+                              <td title="Kolom ini tidak bisa diedit"
+    						      class="" id="pass"><?php echo $c->dibuat?></td>
                           <td><button class="btn btn-danger btn-xs" onclick="hapus(<?php echo $c->id;?>)">
 						  <i class="fa fa-remove"></i></button></td>
                         </tr>
@@ -130,6 +136,12 @@ include 'header.php'
 				<input name="pass" id="passw" placeholder="Masukkan password" class="form-control" type="text">
               </div>
             </div>
+            <div class="form-group">
+              <label class="control-label col-md-3">Ip Address</label>
+              <div class="col-md-9">
+				<input name="ip" id="ip" placeholder="Format ipv4" class="form-control" type="text">
+              </div>
+            </div>
           </div>
         </form>
           </div>
@@ -158,11 +170,12 @@ include 'header.php'
 	});
 
 	$(document).ready(function(){
-		$("#name, #users, #passw").on('input', function() {
+		$("#name, #users, #passw, #ip").on('input', function() {
 			var nama = document.getElementById('name').value;
 			var user = document.getElementById('users').value;
 			var pass = document.getElementById('passw').value;
-			if(nama!=='' && user!=='' && pass!==''){
+			var ip = document.getElementById('ip').value;
+			if(nama!=='' && user!=='' && pass!=='' && ip!==''){
 				document.getElementById('btnSave').setAttribute('class','btn btn-default');
 			}
 			else{

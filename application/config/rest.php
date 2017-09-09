@@ -110,7 +110,7 @@ $config['rest_realm'] = 'REST API';
 |           authorization key
 |
 */
-$config['rest_auth'] = 'basic';
+$config['rest_auth'] = 'digest';
 
 /*
 |--------------------------------------------------------------------------
@@ -228,7 +228,7 @@ $config['rest_valid_logins'] = ['admin' => '1234', 'admin2' => '123456'];
 |    restrict certain methods to IPs in your white-list
 |
 */
-$config['rest_ip_whitelist_enabled'] = FALSE;
+$config['rest_ip_whitelist_enabled'] = TRUE;
 
 /*
 |--------------------------------------------------------------------------
@@ -253,7 +253,7 @@ $config['rest_handle_exceptions'] = TRUE;
 | 127.0.0.1 and 0.0.0.0 are allowed by default
 |
 */
-$config['rest_ip_whitelist'] = '';
+$config['rest_ip_whitelist'] = '192.168.3.4, ::1';
 
 /*
 |--------------------------------------------------------------------------
