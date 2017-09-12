@@ -4,7 +4,7 @@ class mdata extends CI_Model{
 
   function apicabang()
   {
-    $hasil = $this->db->query('select user, pass from cabang')->result();
+    $hasil = $this->db->query('SELECT user, pass FROM cabang')->result();
     foreach ($hasil as $h ) {
       $user[] = $h->user;
     }
@@ -16,7 +16,7 @@ class mdata extends CI_Model{
 
   function apiip()
   {
-    $hasil = $this->db->query('select ip from cabang')->result();
+    $hasil = $this->db->query('SELECT ip FROM cabang')->result();
     $ip = '';
     foreach ($hasil as $h ) {
       $ip = $ip.$h->ip.',';
@@ -52,5 +52,10 @@ class mdata extends CI_Model{
       $result = $h->id;
     }
     return $result;
+  }
+
+  function search($search)
+  {
+    return $this->db->query('SELECT idbarang, nama FROM barang WHERE nama LIKE "%'.$search.'%"');
   }
 }

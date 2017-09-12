@@ -314,19 +314,22 @@ include 'header.php'
           <div class="form-group">
             <label class="control-label col-md-3">Id Transaksi</label>
             <div class="col-md-9">
-              <input name="idtrans" id="idtrans" placeholder="Masukkan id transaksi" class="form-control" type="text">
+              <input name="idtrans" id="idtrans" placeholder="Id transaksi harus unik" class="form-control" type="text">
             </div>
           </div>
           <div class="input" id="1000">
+            <div class="form-group hidden hilang">
+              <label class="control-label col-md-3">Id Barang</label>
+              <div class="col-md-9">
+                <input placeholder="Id barang harus unik" class="form-control inputid" type="text">
+              </div>
+            </div>
             <div class="form-group">
               <label class="control-label col-md-3">Nama Barang</label>
               <div class="col-md-7">
-                <select id="pil" name="pil[]" class="form-control" onchange="javascript:satuan(this.value)">
-                  <option value="0" selected>--Pilih--</option>
-                  <?php foreach($barang as $d){?>
-                  <option value="<?php echo $d->idbarang?>"><?php echo $d->nama?></option>
-                  <?php }?>
-                </select>
+                <input type="text" name="nama[]" value="" placeholder="Masukkan nama barang" class="form-control barang" autocomplete="on">
+                <input type="hidden" name="pil[]" value="" class="isiid">
+                <div class="daftarbarang" id="daftarbarang"></div>
               </div>
               </div>
               <div class="form-group">
@@ -341,8 +344,8 @@ include 'header.php'
                   <input name="jml[]" id="jml" placeholder="Jumlah barang" class="form-control" type="text">
                 </div>
                 <label class="control-label col-md-1" style="padding-left:3px">Satuan</label>
-                <div class="col-md-3 colsatuan" id="wtf">
-                  <input value="" class="form-control" type="text" disabled>
+                <div class="col-md-3 colsatuan" >
+                  <input name="satuan[]" value="" id="" class="form-control satuan" type="text" disabled>
                 </div>
                 <div class="col-md-1">
                   <a class="btn btn-primary btn-sm plus" id="2000" onclick=""><i class="fa fa-plus"></i></a>
@@ -465,12 +468,14 @@ include 'header.php'
       var idminus = idbaru*2; var idminus2 = idminus-2;
       var id2 = parseInt($(this).closest('div.input').prop('id'));
       var idsbaru = id2+1;
-        $("#form-body").append('<div class="input" id="'+idsbaru+'"><div class="form-group"><label class="control-label col-md-3">Nama Barang</label><div class="col-md-7">'
-      +'<select id="pil" name="pil[]" class="form-control" onchange="javascript:satuan(this.value)"><option value="0" selected>--Pilih--</option><?php foreach($barang as $d){?>'
-      +'<option value="<?php echo $d->idbarang?>"><?php echo $d->nama?></option><?php }?></select></div></div>'
+        $("#form-body").append('<div class="input" id="'+idsbaru+'"><div class="form-group hidden hilang"><label class="control-label col-md-3">Id Barang</label>'
+      +'<div class="col-md-9"><input placeholder="Id barang harus unik" class="form-control" type="text"></div></div>'
+      +'<div class="form-group"><label class="control-label col-md-3">Nama Barang</label><div class="col-md-7">'
+      +'<input type="text" name="" value="" placeholder="Masukkan nama barang" class="form-control barang" autocomplete="on">'
+      +'<input type="hidden" name="pil[]" value="" class="isiid"><div class="daftarbarang" id="daftarbarang"></div></div></div>'
       +'<div class="form-group"><label class="control-label col-md-3" style="padding-left:3px">Harga</label><div class="col-md-7"><input name="harga[]" id="harga" placeholder="Harga Satuan" class="form-control" type="text"></div></div>'
       +'<div class="form-group"><label class="control-label col-md-3">Jumlah</label><div class="col-md-3"><input name="jml[]" id="jml" placeholder="Jumlah barang" class="form-control" type="text"></div>'
-      +'<label class="control-label col-md-1" style="padding-left:3px">Satuan</label><div class="col-md-3 colsatuan" id=""><input value="" class="form-control" type="text" disabled></div>'
+      +'<label class="control-label col-md-1" style="padding-left:3px">Satuan</label><div class="col-md-3 colsatuan" id=""><input value="" class="form-control satuan" id="" type="text" disabled></div>'
       +'<div class="col-md-1"><a class="btn btn-primary btn-sm plus" id="'+idbaru+'"><i class="fa fa-plus"></i></a></div>'
       +'<div class="col-md-1"><a class="btn btn-danger btn-sm minus" id="'+idminus+'"><i class="fa fa-minus"></i></a></div></div></div>');
        $('#'+id).attr('class','btn btn-primary btn-sm plus hidden');
@@ -497,7 +502,7 @@ include 'header.php'
       var id2 = parseInt($(this).closest('div.form-group').prop('id'));
       var idsbaru = id2+1;
         $("#form-body2").append('<div class="form-group" id="'+idsbaru+'"><label class="control-label col-md-3">Nama Bahan</label><div class="col-md-3">'
-      +'<select id="pil" name="pil[]" class="form-control" onchange=""><option value="0" selected>--Pilih--</option><?php foreach($barang as $d){?>'
+      +'<select id="pil2" name="pil[]" class="form-control" onchange=""><option value="0" selected>--Pilih--</option><?php foreach($barang as $d){?>'
       +'<option value="<?php echo $d->idbarang?>"><?php echo $d->nama?></option><?php }?></select></div>'
       +'<label class="control-label col-md-1" style="padding-left:0px">Jumlah</label><div class="col-md-3"><input name="jml[]" id="jml" placeholder="Jumlah bahan" class="form-control" type="text"></div>'
       +'<div class="col-md-1"><a class="btn btn-primary btn-sm pluss" id="'+idbaru+'"><i class="fa fa-plus"></i></a></div>'
@@ -683,18 +688,61 @@ include 'header.php'
       }
     }
 
-    //show satuan perbarang
-    function satuan(id) {
-      var idroot = $(this).children(":selected").html();
-      var idcol = $('#'+idroot).find('div.form-group div.colsatuan').prop('id');
-      console.log(idroot);
-      $.get({
-  			url : '<?php echo site_url('gudang/satuanbarang/');?>'+id,
-  			success : function(data){
-  				$('.colsatuan').html(data);
-  			}
-  		});
-    }
+    //search autocomplete
+    $(document).ready(function(){
+      $(document).on('keyup','.barang', function(){
+        var idroot = $(this).closest('div.input').prop('id');
+        var barang = $(this).val();
+        if(barang != ''){
+          $.get({
+            url:'<?php echo site_url('gudang/search/') ?>'+barang,
+            success:function(data) {
+              $('#'+idroot+' div.daftarbarang').fadeIn();
+              $('#'+idroot+' div.daftarbarang').html(data);
+            }
+          });
+        }
+      });
+
+      $(document).ready(function(){
+        $(document).on('click', '#daftarbarang ul li', function(){
+        var name = $(this).attr('name');
+        var id = $(this).attr('id');
+        var idroot = $(this).closest('div.input').prop('id');
+        if(name == 'baru'){
+          $('#'+idroot+' input.barang').val(id);
+          $('#'+idroot+' input.satuan').removeAttr('disabled');
+          $('#'+idroot+' input.satuan').removeAttr('readOnly');
+          $('#'+idroot+' input.satuan').removeAttr('value');
+          $('#'+idroot+' div.hilang').attr('class','form-group hilang');
+          $('#'+idroot+' input.isiid').removeAttr('name');
+          $('#'+idroot+' input.inputid').attr('name','pil[]');
+          $('#'+idroot+' div.daftarbarang').fadeOut();
+        }else{
+          $('#'+idroot+' input.barang').val($(this).text());
+          $('#'+idroot+' input.inputid').removeAttr('name');
+          $('#'+idroot+' input.isiid').attr('name','pil[]');
+          $('#'+idroot+' input.isiid').val(id);
+          $('#'+idroot+' div.hilang').attr('class','form-group hilang hidden');
+          $('#'+idroot+' div.daftarbarang').fadeOut();
+          $.get({
+      			url : '<?php echo site_url('gudang/satuanbarang/');?>'+id,
+      			success : function(data){
+      				$('#'+idroot+' div.colsatuan').html(data);
+      			}
+      		});
+        }
+        console.log(id);
+        });
+      });
+
+      $(document).ready(function(){
+        $(document).on('click', function(){
+          var idroot = $(this).closest('div.input').prop('id');
+          $('#'+idroot+' div.daftarbarang').fadeOut();
+        });
+      });
+    });
 	</script>
 </body>
 <?php

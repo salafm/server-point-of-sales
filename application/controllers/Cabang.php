@@ -13,7 +13,7 @@ class Cabang extends CI_Controller{
 
 	function index(){
 		$data['judul'] = 'Database Cabang';
-		$data['cabang'] = $this->mdata->tampil_cabang()->result();
+		$data['cabang'] = $this->mdata->tampil_all('cabang')->result();
 		$this->load->view('vcabang',$data);
 	}
 

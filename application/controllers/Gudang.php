@@ -49,17 +49,34 @@ class Gudang extends CI_Controller
   {
     $idtrans = $this->input->post('idtrans',true);
     $idbarang = $this->input->post('pil',true);
+    $nama = $this->input->post('nama',true);
     $harga = $this->input->post('harga',true);
     $jml = $this->input->post('jml',true);
+    $satuan = $this->input->post('satuan',true);
     $n = sizeof($idbarang);
     for ($i = 0; $i < $n; $i++){
-      $input = array(
-        'idbarang' => $idbarang[$i],
-        'harga' => $harga[$i],
-        'idtransaksi' => $idtrans,
-        'jumlah' => $jml[$i]
-      );
-      $this->mdata->simpan('barangmasuk_details',$input);
+      $where = array('idbarang' => $idbarang[$i]);
+      $cek = $this->mdata->tampil_where('barang', $where)->num_rows();
+      if($cek>0){
+        $input = array(
+          'idbarang' => $idbarang[$i],
+          'harga' => $harga[$i],
+          'idtransaksi' => $idtrans,
+          'jumlah' => $jml[$i],
+          'satuan' => $satuan[$i]
+        );
+        $this->mdata->simpan('barangmasuk_details',$input);
+      }
+      else {
+        $input = array(
+          'idbarang' => $idbarang[$i],
+          'nama' => $nama[$i],
+          'harga' => $harga[$i],
+          'stok' => $jml[$i],
+          'satuan' => $satuan[$i]
+        );
+        $this->mdata->simpan('barang',$input);
+      }
     }
 
     $input2 = array('idtransaksi' => $idtrans );
@@ -91,6 +108,22 @@ class Gudang extends CI_Controller
   {
     $where = array('idbarang' => $id);
     $data = $this->mdata->tampil_where('barang', $where)->result();
-    echo '<input value="'.$data[0]->satuan.'" class="form-control" type="text" disabled>';
+    echo '<input name="satuan[]" id="" value="'.$data[0]->satuan.'" class="form-control satuan" type="text" readOnly>';
+  }
+
+  function search($cari){
+    $hasil = $this->mdata->search($cari)->result();
+    $cek = $this->mdata->search($cari)->num_rows();
+    $output = '<ul class="list-unstyled" id="pilihanbarang">';
+    if ($cek > 0){
+      foreach ($hasil as $h) {
+        $output .= '<li id="'.$h->idbarang.'" class="list-group-item">'.$h->nama.'</li>';
+      }
+    }
+    else {
+      $output .= '<li class="list-group-item" name="baru" id="'.$cari.'">Tambah barang baru "'.$cari.'"</li>';
+    }
+    $output .= '</ul>';
+    echo $output;
   }
 }
