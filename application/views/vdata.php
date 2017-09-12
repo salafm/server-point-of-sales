@@ -48,50 +48,134 @@ include 'header.php'
           <div class="">
             <div class="page-title">
               <div class="title_left">
-                <h3>Database<small> Barang</small></h3>
+                <h3>Database<small> Barang Client</small></h3>
               </div>
             </div>
 			<div class="clearfix"></div>
 
 			<div class="row">
-			<div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
-                    <h2>Silahkan Pilih Cabang :</h2>
-					<div class="col-md-8 col-sm-8 col-xs-6">
-					<select id="pil" class="form-control input-sm" onchange="javascript:lihatbarang(this.value)">
-						<option value="0" selected>--Pilih--</option>
-						<?php foreach($cabang as $c){?>
-						<option value="<?php echo $c->id?>"><?php echo $c->nama?></option>
-						<?php }?>
-					</select></div>
-					<a class="btn btn-default btn-sm disabled" onclick="tambah()" id="tombol"><span class="fa fa-plus"></span> Tambah Barang</a>
-                    <div class="clearfix"></div>
-                  </div>
-                  <div class="x_content">
-                    <table id="myTable" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
-                      <thead>
-                        <tr>
-                          <th>No. </th>
-                          <th>ID Barang</th>
-                          <th>Deskripsi</th>
-                          <th>Harga</th>
-                          <th>Stok</th>
-                          <th>Satuan</th>
-                          <th>Hapus</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                      </tbody>
-                    </table>
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+          <div class="x_content">
+            <div class="" role="tabpanel" data-example-id="togglable-tabs">
+              <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
+                <li role="presentation" class="active"><a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">Stok Barang</a>
+                </li>
+                <li role="presentation" class=""><a href="#tab_content2" role="tab" id="profile-tab" data-toggle="tab" aria-expanded="false">Barang Masuk</a>
+                </li>
+                <li role="presentation" class=""><a href="#tab_content3" role="tab" id="profile-tab2" data-toggle="tab" aria-expanded="false">Barang Keluar</a>
+                </li>
+              </ul>
+              <div id="myTabContent" class="tab-content">
+                <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
+                  <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="x_title">
+                      <h2>Silahkan Pilih Cabang :</h2>
+            					<div class="col-md-8 col-sm-8 col-xs-6">
+            					<select id="pil" class="form-control input-sm" onchange="javascript:lihatbarang(this.value)">
+            						<option value="0" selected>--Pilih--</option>
+            						<?php foreach($cabang as $c){?>
+            						<option value="<?php echo $c->id?>"><?php echo $c->nama?></option>
+            						<?php }?>
+            					</select></div>
+            					<a class="btn btn-default btn-sm disabled" onclick="tambah()" id="tombol"><span class="fa fa-plus"></span> Tambah Barang</a>
+                        <div class="clearfix"></div>
+                      </div>
+                      <div class="x_content">
+                        <table id="myTable" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+                          <thead>
+                            <tr>
+                              <th>No. </th>
+                              <th>ID Barang</th>
+                              <th>Deskripsi</th>
+                              <th>Harga</th>
+                              <th>Stok</th>
+                              <th>Satuan</th>
+                              <th>Hapus</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                          </tbody>
+                        </table>
+                    </div>
+            			 </div>
+                </div>
+                <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="profile-tab">
+                  <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="x_title">
+                      <h2>Silahkan Pilih Cabang :</h2>
+            					<div class="col-md-8 col-sm-8 col-xs-6">
+            					<select id="pil" class="form-control input-sm" onchange="javascript:lihatbarang(this.value)">
+            						<option value="0" selected>--Pilih--</option>
+            						<?php foreach($cabang as $c){?>
+            						<option value="<?php echo $c->id?>"><?php echo $c->nama?></option>
+            						<?php }?>
+            					</select></div>
+            					<a class="btn btn-default btn-sm disabled" onclick="tambah()" id="tombol"><span class="fa fa-plus"></span> Tambah Barang</a>
+                        <div class="clearfix"></div>
+                      </div>
+                      <div class="x_content">
+                        <table id="myTable1" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+                          <thead>
+                            <tr>
+                              <th>No. </th>
+                              <th>ID Barang</th>
+                              <th>Deskripsi</th>
+                              <th>Harga</th>
+                              <th>Stok</th>
+                              <th>Satuan</th>
+                              <th>Hapus</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                          </tbody>
+                        </table>
+                    </div>
+            			 </div>
+                </div>
+                <div role="tabpanel" class="tab-pane fade" id="tab_content3" aria-labelledby="profile-tab">
+                  <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="x_title">
+                      <h2>Silahkan Pilih Cabang :</h2>
+            					<div class="col-md-8 col-sm-8 col-xs-6">
+            					<select id="pil" class="form-control input-sm" onchange="javascript:lihatbarang(this.value)">
+            						<option value="0" selected>--Pilih--</option>
+            						<?php foreach($cabang as $c){?>
+            						<option value="<?php echo $c->id?>"><?php echo $c->nama?></option>
+            						<?php }?>
+            					</select></div>
+            					<a class="btn btn-default btn-sm disabled" onclick="tambah()" id="tombol"><span class="fa fa-plus"></span> Tambah Barang</a>
+                        <div class="clearfix"></div>
+                      </div>
+                      <div class="x_content">
+                        <table id="myTable2" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+                          <thead>
+                            <tr>
+                              <th>No. </th>
+                              <th>ID Barang</th>
+                              <th>Deskripsi</th>
+                              <th>Harga</th>
+                              <th>Stok</th>
+                              <th>Satuan</th>
+                              <th>Hapus</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                          </tbody>
+                        </table>
+                    </div>
+            			 </div>
                 </div>
               </div>
-			 </div>
-		   </div>
-         </div>
-		</div>
+            </div>
+          </div>
+        </div>
+      </div>
 	  </div>
 	</div>
+</div>
+</div>
+</div>
 
 		<!-- Bootstrap modal -->
   <div class="modal fade" id="modal_form" role="dialog">
@@ -104,36 +188,38 @@ include 'header.php'
       <div class="modal-body form">
         <form action="#" id="form" class="form-horizontal">
           <input type="hidden" value="" name="barang"/>
-          <div class="form-body">
+          <div class="form-body" id="form-body">
             <div class="form-group">
-              <label class="control-label col-md-3">Id Barang</label>
+              <label class="control-label col-md-3">Id Transaksi</label>
               <div class="col-md-9">
-                <input name="idbarang" id="1" placeholder="Masukkan id barang" class="form-control" type="text">
+                <input name="idtrans" id="idtrans" placeholder="Id transaksi harus unik" class="form-control" type="text">
               </div>
             </div>
-            <div class="form-group">
-              <label class="control-label col-md-3">Nama Barang</label>
-              <div class="col-md-9">
-                <input name="nama" id="2" placeholder="Masukkan nama barang" class="form-control" type="text">
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="control-label col-md-3">Harga</label>
-              <div class="col-md-9">
-				<input name="harga" id="3" placeholder="Masukkan harga barang" class="form-control" type="text">
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="control-label col-md-3">Stock</label>
-              <div class="col-md-9">
-				<input name="stok" id="4" placeholder="Masukkan jumlah persediaan barang" class="form-control" type="text">
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="control-label col-md-3">Satuan</label>
-              <div class="col-md-9">
-				<input name="satuan" id="5" placeholder="kg, pack, sachet, dll" class="form-control" type="text">
-              </div>
+            <div class="input" id="1000">
+              <div class="form-group">
+                <label class="control-label col-md-3">Nama Barang</label>
+                <div class="col-md-7">
+                  <select id="pil" name="pil[]" class="form-control" onchange="">
+                    <option value="0" selected>--Pilih--</option>
+                    <?php foreach($produk as $d){?>
+                    <option value="<?php echo $d->idproduk?>"><?php echo $d->nama?></option>
+                    <?php }?>
+                  </select>
+                </div>
+                </div>
+                <div class="form-group">
+                  <label class="control-label col-md-3">Jumlah</label>
+                  <div class="col-md-3">
+                    <input name="jml[]" id="jml" placeholder="Jumlah produk" class="form-control" type="text">
+                  </div>
+                  <label class="control-label col-md-1" style="padding-left:3px">Harga</label>
+                  <div class="col-md-3">
+                    <input name="harga[]" id="harga" placeholder="Harga produk" class="form-control" type="text">
+                  </div>
+                  <div class="col-md-1">
+                    <a class="btn btn-primary btn-sm plus" id="2000" onclick=""><i class="fa fa-plus"></i></a>
+                  </div>
+                </div>
             </div>
           </div>
         </form>
@@ -160,10 +246,12 @@ include 'header.php'
     <script src="<?php echo base_url('build/js/custom.min.js'); ?>"></script>
 	<script>
 
-	$('#myTable').dataTable({
+  //init datatable
+	$('#myTable, #myTable1, #myTable2').dataTable({
 		responsive:true
 	});
 
+  //tampil produk
 	function lihatbarang(id){
 		if(id!=0){
 			document.getElementById('tombol').setAttribute('class','btn btn-default btn-sm');
@@ -186,6 +274,7 @@ include 'header.php'
 		});
 	}
 
+  //validation
 	$(document).ready(function(){
 		$("#1, #2, #3, #4, #5").on('input', function() {
 			var nama = document.getElementById('1').value;
@@ -202,18 +291,20 @@ include 'header.php'
 		});
 	});
 
+  //show modal tambah produk
 	function tambah()
     {
 		var e = document.getElementById("pil");
 		var value = e.options[e.selectedIndex].value;
 		var teks = e.options[e.selectedIndex].innerHTML;
-		document.getElementById('btnSave').setAttribute('class','btn btn-default disabled');
+		//document.getElementById('btnSave').setAttribute('class','btn btn-default disabled');
 		document.getElementById('btnSave').setAttribute('onclick','simpan('+value+')');
 		$('#form')[0].reset();
         $('#modal_form').modal('show');
-		$('.modal-title').text('Tambah Barang di '+teks);
+		$('.modal-title').text('Tambah Produk di '+teks);
     }
 
+ //simpan tambah produk
 	function simpan(id)
     {
 	 $.ajax({
@@ -229,11 +320,13 @@ include 'header.php'
 		},
 		error: function (jqXHR, textStatus, errorThrown)
 		{
-			alert('Gagal menambahkan data');
+			alert('Gagal menambahkan data \n'+errorThrown);
 		}
 	});
     }
 
+
+  //edit dblclick
 	$(document).on('dblclick', '.edit' ,function() {
 	var ok = 0;
 	var id = $(this).closest('tr').prop('id');
@@ -279,6 +372,7 @@ include 'header.php'
 	}).appendTo( $this.empty() ).focus();
 	});
 
+  //hapus data barang
 	function hapus(id)
     {
       if(confirm('Apa anda yakin akan menghapus data ini?'))
@@ -302,6 +396,37 @@ include 'header.php'
       }
     }
 
+    //add input elemen tambah produk
+    $(document).on('click', 'a.plus' ,function(){
+        var id = $(this).attr('id');
+        var ids = parseInt(id);
+        var idbaru = ids+1;
+        var idminus = idbaru*2; var idminus2 = idminus-2;
+        var id2 = parseInt($(this).closest('div.input').prop('id'));
+        var idsbaru = id2+1;
+        $("#form-body").append('<div class="input" id="'+idsbaru+'"><div class="form-group"><label class="control-label col-md-3">Nama Barang</label><div class="col-md-7">'
+        +'<select id="pil" name="pil[]" class="form-control" onchange=""><option value="0" selected>--Pilih--</option><?php foreach($produk as $d){?>'
+        +'<option value="<?php echo $d->idproduk?>"><?php echo $d->nama?></option><?php }?></select></div></div>'
+        +'<div class="form-group"><label class="control-label col-md-3">Jumlah</label><div class="col-md-3"><input name="jml[]" id="jml" placeholder="Jumlah barang" class="form-control" type="text"></div>'
+        +'<label class="control-label col-md-1" style="padding-left:3px">Harga</label><div class="col-md-3"><input name="harga[]" id="harga" placeholder="Harga Satuan" class="form-control" type="text"></div>'
+        +'<div class="col-md-1"><a class="btn btn-primary btn-sm plus" id="'+idbaru+'"><i class="fa fa-plus"></i></a></div>'
+        +'<div class="col-md-1"><a class="btn btn-danger btn-sm minus" id="'+idminus+'"><i class="fa fa-minus"></i></a></div></div></div>');
+         $('#'+id).attr('class','btn btn-primary btn-sm plus hidden');
+         $('#'+idminus2).attr('class','btn btn-primary btn-sm minus hidden');
+    });
+
+    //hapus elemen input tambah stok barang
+     $(document).on('click','a.minus', function(){
+       var id = $(this).attr('id');
+       var ids = parseInt(id); ids2 = ids-2;
+       var idbaru = ids/2; idbaru = idbaru-1;
+       var id2 = $(this).closest('div.input').prop('id');
+       $('#'+id2).remove();
+       $('#'+idbaru).attr('class','btn btn-primary btn-sm plus');
+       $('#'+ids2).attr('class','btn btn-danger btn-sm minus');
+     });
+
+     //remove all select
     function clearSelection() {
       if(document.selection && document.selection.empty) {
           document.selection.empty();

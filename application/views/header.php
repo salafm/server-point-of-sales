@@ -5,13 +5,13 @@
 		.nav_menu{
 			margin : 0 !important;
 		}
-		
+
 		i{
 			border:0 !important;
 			margin:0 !important;
 			padding:0 !important;
 		}
-		
+
 		a.site_title{
 			padding-left:25px;
 		}
@@ -32,7 +32,7 @@
     <link href="<?php echo base_url('vendors/nprogress/nprogress.css'); ?>" rel="stylesheet">
     <!-- iCheck -->
     <link href="<?php echo base_url('vendors/iCheck/skins/flat/green.css'); ?>" rel="stylesheet">
-	
+
     <!-- bootstrap-progressbar -->
     <link href="<?php echo base_url('vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css'); ?>" rel="stylesheet">
     <!-- JQVMap -->
@@ -47,7 +47,7 @@
   <body class="nav-md">
     <div class="container body">
       <div class="main_container">
-	  
+
         <div class="col-md-3 left_col">
           <div class="left_col scroll-view">
             <div class="navbar nav_title" style="border: 0;">
@@ -79,7 +79,9 @@
                   </li>
                   <li><a href="<?php echo site_url('cabang')?>"><i class="fa fa-bank"></i> Database Cabang </a>
                   </li>
-                  <li><a href="<?php echo site_url('data')?>" ><i class="fa fa-database"></i> Database Barang </a>
+                  <li><a href="<?php echo site_url('data')?>" ><i class="fa fa-database"></i> Database Client </a>
+                  </li>
+                  <li><a href="<?php echo site_url('gudang')?>" ><i class="fa fa-cubes"></i> Database Gudang </a>
                   </li>
                 </ul>
               </div>

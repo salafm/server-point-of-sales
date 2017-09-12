@@ -44,14 +44,24 @@ class Cabang extends CI_Controller{
 		$user = $this->input->post('user',true);
 		$pass = $this->input->post('pass',true);
 		$ip = $this->input->post('ip',true);
+		$api = $this->input->post('api',true);
 		$input = array(
 			'nama' => $nama,
 			'user' => $user,
 			'pass' => $pass,
 			'ip' => $ip
 		);
-
 		$this->mdata->simpan('cabang',$input);
+		$id = $this->mdata->getId($user);
+		if($id > 0){
+			$input2 = array (
+				'user_id' => $id,
+				'apikey' => $api,
+				'level' => 10,
+				'ip_addresses' => $ip
+			);
+			$this->mdata->simpan('apikeys',$input2);
+		}
 		echo json_encode(array("status" => TRUE));
 	}
 

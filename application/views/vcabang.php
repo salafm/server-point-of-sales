@@ -142,10 +142,17 @@ include 'header.php'
 				<input name="ip" id="ip" placeholder="Format ipv4" class="form-control" type="text">
               </div>
             </div>
+            <div class="form-group">
+              <label class="control-label col-md-3">API Key</label>
+              <div class="col-md-9">
+				<input name="api" id="api" placeholder="Klik generate API Key untuk mendapatkan API Key" class="form-control"  type="text" readonly="true">
+              </div>
+            </div>
           </div>
         </form>
           </div>
           <div class="modal-footer">
+            <button class="btn btn-default btn-sm" onclick="generateAPI()"><span class="fa fa-key"></span> Generate API Key</button>
             <a type="button" id="btnSave" onclick="simpan()" class="btn btn-default disabled">Simpan</a>
             <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
           </div>
@@ -251,7 +258,7 @@ include 'header.php'
 		},
 		error: function (jqXHR, textStatus, errorThrown)
 		{
-			alert('Gagal menambahkan data');
+			alert('Gagal menambahkan data \n'+textStatus+' : \n'+errorThrown);
 		}
 	});
     }
@@ -286,6 +293,17 @@ include 'header.php'
         var sel = window.getSelection();
         sel.removeAllRanges();
     }
+  }
+
+  function generateAPI()
+  {
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    for (var i = 0; i < 16; i++)
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    document.getElementById('api').value = text;
   }
 	</script>
 </body>

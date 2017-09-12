@@ -5,21 +5,22 @@ class Data extends CI_Controller{
 	function __construct(){
 		parent::__construct();
 		$this->load->model('mdata');
-		
+
 		if($this->session->userdata('status') != "login"){
 			redirect(site_url("login"));
 		}
 	}
-	
+
 	function index(){
 		$data['judul'] = 'Restopos | Database Barang';
-		$data['cabang'] = $this->mdata->tampil_cabang()->result();
+		$data['produk'] = $this->mdata->tampil_all('produk')->result();
+		$data['cabang'] = $this->mdata->tampil_all('cabang')->result();
 		$this->load->view('vdata',$data);
 	}
-	
+
 	function tampil($id){
 		$where = array('idcabang' => $id);
-		$data = $this->mdata->tampil_barang('barang', $where)->result();
+		$data = $this->mdata->tampil_where('barang', $where)->result();
 		$no = 1;
 		foreach($data as $d){
 		echo '<tr id="'.$d->id.'"><td>'.$no++.'</td>
@@ -31,27 +32,30 @@ class Data extends CI_Controller{
 		  <td><button class="btn btn-danger btn-xs" onclick="hapus('.$d->id.')"><i class="fa fa-remove"></i></button></td></tr>';
 		}
 	}
-	
+
 	function simpanbarang($id)
 	{
-		$idbarang = $this->input->post('idbarang',true);
-		$nama = $this->input->post('nama',true);
-		$harga = $this->input->post('harga',true);
-		$stok = $this->input->post('stok',true);
-		$satuan = $this->input->post('satuan',true);
-		$input = array(
-			'idbarang' => $idbarang,
-			'idcabang' => $id,
-			'nama' => $nama,
-			'harga' => $harga,
-			'stok' => $stok,
-			'satuan' => $satuan
+		$idtrans = $this->input->post('idtrans',true);
+		$idproduk = $this->input->post('pil',true);
+		$jml = $this->input->post('jml',true);
+		$n = sizeof($idproduk);
+    for ($i = 0; $i < $n; $i++){
+      $input = array(
+				'idtransaksi' => $idtrans,
+        'idproduk' => $idproduk[$i],
+        'jumlah' => $jml[$i]
+      );
+      $this->mdata->simpan('barangkeluar_details',$input);
+    }
+
+		$input2 = array(
+			'idtransaksi' => $idtrans,
+			'idcabang' => $id
 		);
-		
-		$this->mdata->simpan('barang',$input);
+		$this->mdata->simpan('barangkeluar',$input2);
 		echo json_encode(array("status" => TRUE));
 	}
-	
+
 	function hapus($id)
 	{
 		$this->mdata->hapus($id,'barang');

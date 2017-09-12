@@ -24,12 +24,12 @@ class mdata extends CI_Model{
     return $ip;
   }
 
-	function tampil_cabang(){
-		return $this->db->get('cabang');
+	function tampil_all($table){
+		return $this->db->get($table);
 	}
 
-	function tampil_barang($table, $where){
-		return $this->db->get_where('barang', $where);
+	function tampil_where($table, $where){
+		return $this->db->get_where($table, $where);
 	}
 
 	function editsimpan($id,$fields,$table){
@@ -44,4 +44,13 @@ class mdata extends CI_Model{
 	{
 		$this->db->where('id',$id)->delete($table);
 	}
+
+  function getId($user)
+  {
+    $hasil = $this->db->where('user',$user)->get('cabang')->result();
+    foreach ($hasil as $h) {
+      $result = $h->id;
+    }
+    return $result;
+  }
 }
