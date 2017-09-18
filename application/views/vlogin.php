@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
 	<style>
-	.input-group .form-control 
+	.input-group .form-control
 	{
 		margin: 0px !important;
 	}
@@ -13,7 +13,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Restopos | Masuk</title>
+    <title>Waroenkpos | Masuk</title>
 
     <!-- Bootstrap -->
     <link href="<?php echo base_url('vendors/bootstrap/dist/css/bootstrap.min.css'); ?>" rel="stylesheet">
@@ -32,7 +32,7 @@
     <div>
       <a class="hiddenanchor" id="signup"></a>
       <a class="hiddenanchor" id="signin"></a>
-	  <?php 
+	  <?php
 		if((isset($login))=='gagal'){
 			$hidden = '';
 		}
@@ -70,8 +70,8 @@
                 <br />
 
                 <div>
-                  <h1><i class="fa fa-cutlery"></i> RESTo<b><i>pos</i></b></h1>
-                  <p>©2017 Hak Cipta dilindungi Undang-Undang. <b>Restopos</b></p>
+                  <h1><i class="fa fa-cutlery"></i> Waroenk<b><i>pos</i></b></h1>
+                  <p>©2017 Hak Cipta dilindungi Undang-Undang. <b>Waroenkpos</b></p>
                 </div>
               </div>
             </form>
@@ -99,8 +99,8 @@
                 <br />
 
                 <div>
-                  <h1><i class="fa fa-cutlery"></i> RESTo<b><i>pos</i></b></h1>
-                  <p>©2017 Hak Cipta dilindungi Undang-Undang. <b>Restopos</b></p>
+                  <h1><i class="fa fa-cutlery"></i> Waroenk<b><i>pos</i></b></h1>
+                  <p>©2017 Hak Cipta dilindungi Undang-Undang. <b>Waroenkpos</b></p>
                 </div>
               </div>
             </form>

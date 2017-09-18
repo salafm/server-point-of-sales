@@ -5,18 +5,18 @@ class Setting extends CI_Controller{
 	function __construct(){
 		parent::__construct();
 		$this->load->model('msetting');
-		
+
 		if($this->session->userdata('status') != "login"){
 			redirect(site_url("login"));
 		}
 	}
-	
+
 	function index(){
-		$data['judul'] = 'Restopos | Pengaturan';
+		$data['judul'] = 'Waroenkpos | Pengaturan';
 		$data['admins'] = $this->msetting->tampil()->result();
 		$this->load->view('vsetting',$data);
 	}
-	
+
 	function email($id){
 		$password = $this->input->post('password',true);
 		$email = $this->input->post('email2',true);
@@ -34,11 +34,11 @@ class Setting extends CI_Controller{
 		}else{
 			$data['status'] = 'gagal';
 		}
-		$data['judul'] = 'Restopos | Pengaturan';
+		$data['judul'] = 'Waroenkpos | Pengaturan';
 		$data['admins'] = $this->msetting->tampil()->result();
 		$this->load->view('vsetting',$data);
 	}
-	
+
 	function password($id){
 		$password = $this->input->post('pass',true);
 		$pass = $this->input->post('pass2',true);
@@ -56,7 +56,7 @@ class Setting extends CI_Controller{
 		}else{
 			$data['status1'] = 'gagal';
 		}
-		$data['judul'] = 'Restopos | Pengaturan';
+		$data['judul'] = 'Waroenkpos | Pengaturan';
 		$data['admins'] = $this->msetting->tampil()->result();
 		$this->load->view('vsetting',$data);
 	}

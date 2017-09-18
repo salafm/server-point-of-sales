@@ -1,3 +1,9 @@
+<?php
+  date_default_timezone_set("Asia/Jakarta");
+  setlocale(LC_ALL, 'IND');
+
+ ?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -15,6 +21,19 @@
 		a.site_title{
 			padding-left:25px;
 		}
+
+    .modal-open {
+      padding-right: 0px !important;
+      overflow-y: auto !important;
+    }
+
+    input.invalid, textarea.invalid{
+      border: 2px solid red;
+    }
+
+    input.valid, textarea.valid{
+      border: 2px solid green;
+    }
 	</style>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <!-- Meta, title, CSS, favicons, etc. -->
@@ -51,7 +70,7 @@
         <div class="col-md-3 left_col">
           <div class="left_col scroll-view">
             <div class="navbar nav_title" style="border: 0;">
-              <a href="<?php echo site_url('home')?>" class="site_title""><i class="fa fa-cutlery"></i> RESTo<b><i>pos</i></b></a>
+              <a href="<?php echo site_url('home')?>" class="site_title""><i class="fa fa-cutlery"></i> Waroenk<b><i>pos</i></b></a>
             </div>
 
             <div class="clearfix"></div>
@@ -77,11 +96,11 @@
                 <ul class="nav side-menu">
                   <li><a href="<?php echo site_url('home')?>"><i class="fa fa-dashboard"></i> Dashboard </a>
                   </li>
-                  <li><a href="<?php echo site_url('cabang')?>"><i class="fa fa-bank"></i> Database Cabang </a>
+                  <li><a href="<?php echo site_url('cabang')?>"><i class="fa fa-bank"></i> Data Cabang </a>
                   </li>
-                  <li><a href="<?php echo site_url('data')?>" ><i class="fa fa-database"></i> Database Client </a>
+                  <li><a href="<?php echo site_url('data')?>" ><i class="fa fa-database"></i> Data Barang Cabang </a>
                   </li>
-                  <li><a href="<?php echo site_url('gudang')?>" ><i class="fa fa-cubes"></i> Database Gudang </a>
+                  <li><a href="<?php echo site_url('gudang')?>" ><i class="fa fa-cubes"></i> Data Barang Gudang </a>
                   </li>
                 </ul>
               </div>

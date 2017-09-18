@@ -21,7 +21,7 @@ include 'header.php'
     <link href="<?php echo base_url('vendors/nprogress/nprogress.css'); ?>" rel="stylesheet">
     <!-- iCheck -->
     <link href="<?php echo base_url('vendors/iCheck/skins/flat/green.css'); ?>" rel="stylesheet">
-	
+
     <!-- bootstrap-progressbar -->
     <link href="<?php echo base_url('vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css'); ?>" rel="stylesheet">
     <!-- JQVMap -->
@@ -36,7 +36,7 @@ include 'header.php'
   <body class="nav-md">
     <div class="container body">
       <div class="main_container">
-	  
+
          <!-- page content -->
         <div class="right_col" role="main">
           <div class="">
@@ -69,13 +69,13 @@ include 'header.php'
 							<div class="col-md-6">
 							  <div class="pull-right" style="margin-top: 5px; background: #fff; cursor: pointer; padding: 5px 10px;>
 								<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
-								<span><?php echo date('l, d F Y'); ?></span>
+								<span><?php echo strftime("%A, %d %B %Y. Pukul %T WIB", strtotime('now')); ?></span>
 							  </div>
 							</div>
 						  </div>
 						  </br>
 						  <div class="item form-group">
-							<label class="control-label col-md-1 col-md-offset-2 col-sm-1 col-sm-offset-2 col-xs-12" for="email"><h4>Email : </h4> 
+							<label class="control-label col-md-1 col-md-offset-2 col-sm-1 col-sm-offset-2 col-xs-12" for="email"><h4>Email : </h4>
 							</label>
 							<div class="col-md-6 col-sm-6 col-xs-12">
 							  <input disabled value="<?php echo $admins[0]->email;?>" class="form-control col-md-6 col-xs-12">
@@ -98,13 +98,13 @@ include 'header.php'
         <!-- /page content -->
 	  </div>
 	</div>
-	
+
     <!-- Custom Theme Scripts -->
     <script src="<?php echo base_url('build/js/custom.min.js'); ?>"></script>
 	<script>
 	</script>
 </body>
-<?php 
+<?php
 include 'footer.html'
 ?>
 </html>
