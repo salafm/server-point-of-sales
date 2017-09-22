@@ -70,7 +70,7 @@ include 'header.php'
             			<div class="col-md-12 col-sm-12 col-xs-12">
                             <div class="x_panel">
                               <div class="x_title">
-            						<button class="btn btn-default btn-sm" onclick="tambah()"><span class="fa fa-plus"></span> Tambah Cabang</button>
+            						              <button class="btn btn-default btn-sm" onclick="tambah()"><span class="fa fa-plus"></span> Tambah Cabang</button>
                                 <div class="clearfix"></div>
                               </div>
                               <div class="x_content">
@@ -173,14 +173,14 @@ include 'header.php'
             <div class="form-group">
               <label class="control-label col-md-3">Nama Cabang</label>
               <div class="col-md-9">
-                <input name="nama" id="name" placeholder="Masukkan nama cabang" class="form-control" title="Hanya huruf, angka dan karakter spesial(petik atas, titik, spasi, strip)" pattern="^[A-Za-z0-9.' -]{5,30}$" type="text" minlength="3" maxlength="30" autocomplete="off" required>
+                <input name="nama" id="name" placeholder="Masukkan nama cabang" class="form-control" title="Minimal 5 karakter. Hanya huruf, angka dan karakter spesial(petik atas, titik, spasi, strip)" pattern="^[A-Za-z0-9.' -]{5,30}$" type="text" minlength="5" maxlength="30" autocomplete="off" required>
                 <span class="btn-danger" id="errornama"></span>
               </div>
             </div>
             <div class="form-group">
               <label class="control-label col-md-3">Username</label>
               <div class="col-md-9">
-                <input name="user" id="users" placeholder="Username tidak boleh sama dengan yg lain" class="form-control" title="Hanya huruf, angka dan titik" pattern="^[a-zA-Z][a-zA-Z0-9.]{4,15}$" minlength="5" maxlength="15" type="text" autocomplete="off" required>
+                <input name="user" id="users" placeholder="Username tidak boleh sama dengan yg lain" class="form-control" title="Minimal 5 karakter. Hanya huruf, angka dan titik" pattern="^[a-zA-Z][a-zA-Z0-9.]{4,15}$" minlength="5" maxlength="15" type="text" autocomplete="off" required>
               </div>
             </div>
             <div class="form-group">
@@ -229,13 +229,13 @@ include 'header.php'
           <div class="form-group">
             <label class="control-label col-md-3">Nama Petugas</label>
             <div class="col-md-9">
-              <input name="nama" id="namapetugas" placeholder="Nama lengkap petugas" class="form-control" type="text" title="Hanya huruf, angka dan karakter spesial (petik atas, titik, spasi, strip)" pattern="^[A-Za-z0-9.' -]{3,30}$" type="text" minlength="3" maxlength="30" autocomplete="off" required>
+              <input name="nama" id="namapetugas" placeholder="Nama lengkap petugas" class="form-control" type="text" title="Minimal 3 karakter. Hanya huruf, angka dan karakter spesial (petik atas, titik, spasi, strip)" pattern="^[A-Za-z0-9.' -]{3,30}$" type="text" minlength="3" maxlength="30" autocomplete="off" required>
             </div>
           </div>
           <div class="form-group">
             <label class="control-label col-md-3">Username</label>
             <div class="col-md-9">
-              <input name="user" id="username" placeholder="Nama lengkap petugas" class="form-control" type="text" title="Hanya huruf, angka dan titik" pattern="^[a-zA-Z][a-zA-Z0-9.]{4,15}$" minlength="5" maxlength="15" type="text" autocomplete="off" required>
+              <input name="user" id="username" placeholder="Nama lengkap petugas" class="form-control" type="text" title="Minimal 5 karakter. Hanya huruf, angka dan titik" pattern="^[a-zA-Z][a-zA-Z0-9.]{4,15}$" minlength="5" maxlength="15" type="text" autocomplete="off" required>
             </div>
           </div>
           <div class="form-group">
@@ -278,9 +278,9 @@ include 'header.php'
 
   var flag =1;
 
-	$('#myTable,#myTable1 ').DataTable( {
-		responsive: true
-	});
+	$('#myTable,#myTable1 ').DataTable({
+    responsive:false
+  });
 
 	$('.edit').on('dblclick', function(){
 	var ok = 0;
@@ -462,8 +462,8 @@ include 'header.php'
         $('#myTable1').DataTable().destroy();
         $('#myTable1 tbody').html(data);
         $(document).ready(function() {
-          $('#myTable1').dataTable({
-            responsive:true
+          $('#myTable1').DataTable({
+            responsive:false
           });
         } );
       }

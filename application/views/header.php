@@ -43,7 +43,7 @@
 
     <title><?php print_r($judul) ?></title>
 
-        <!-- Bootstrap -->
+    <!-- Bootstrap -->
     <link href="<?php echo base_url('vendors/bootstrap/dist/css/bootstrap.min.css'); ?>" rel="stylesheet">
     <!-- Font Awesome -->
     <link href="<?php echo base_url('vendors/font-awesome/css/font-awesome.min.css'); ?>" rel="stylesheet">
@@ -70,7 +70,7 @@
         <div class="col-md-3 left_col">
           <div class="left_col scroll-view">
             <div class="navbar nav_title" style="border: 0;">
-              <a href="<?php echo site_url('home')?>" class="site_title""><i class="fa fa-cutlery"></i> Waroenk<b><i>pos</i></b></a>
+              <a href="<?php echo site_url('home')?>" class="site_title"><i class="fa fa-cutlery"></i> Waroenk<b><i>pos</i></b></a>
             </div>
 
             <div class="clearfix"></div>
@@ -102,6 +102,7 @@
                   </li>
                   <li><a href="<?php echo site_url('gudang')?>" ><i class="fa fa-cubes"></i> Data Barang Gudang </a>
                   </li>
+                  <!--li><a href="<?php echo site_url('home/reset')?>" ><i class="fa fa-trash"></i> Reset Data Cabang </a></li-->
                 </ul>
               </div>
 
@@ -186,7 +187,7 @@
         </div>
 		</div>
 	</div>
-	<!-- jQuery -->
+	 <!-- jQuery -->
     <script src="<?php echo base_url('vendors/jquery/dist/jquery.min.js'); ?>"></script>
     <!-- Bootstrap -->
     <script src="<?php echo base_url('vendors/bootstrap/dist/js/bootstrap.min.js'); ?>"></script>

@@ -89,4 +89,8 @@ class mdata extends CI_Model{
   function namacabang($where){
     return $this->db->query('SELECT nama FROM cabang WHERE id = '.$where.'');
   }
+
+  function deleteall($tabel){
+    $this->db->empty_table($tabel);
+  }
 }

@@ -38,7 +38,6 @@
 		}
 		else{$hidden='hidden';}
 	  ?>
-
       <div class="login_wrapper">
         <div class="animate form login_form">
           <section class="login_content">
@@ -48,11 +47,11 @@
 				<p class="<?php echo $hidden; ?> btn-danger">Username atau Password salah</p>
 			  </div>
               <div class="input-group">
-                <input type="text" class="form-control" placeholder="Username" name="username" required="" />
+                <input type="text" class="form-control" placeholder="Username" name="username" required="" autocomplete="off" autofocus/>
 				<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
               </div>
               <div class="input-group">
-                <input type="password" class="form-control" placeholder="Password" name="password" required="" />
+                <input type="password" class="form-control" placeholder="Password" name="password" required="" autocomplete="off" />
 				<span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
               </div>
               <div>

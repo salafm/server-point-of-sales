@@ -278,7 +278,7 @@ include 'header.php'
           <div class="form-group">
             <label class="control-label col-md-3">Id Transaksi</label>
             <div class="col-md-9">
-              <input name="idtrans" id="idtrans" placeholder="Id transaksi harus unik" class="form-control" type="text" title="Hanya huruf dan angka" pattern="^[A-Za-z0-9]{3,8}$" minlength="3" maxlength="8" autocomplete="off" required>
+              <input name="idtrans" id="idtrans" placeholder="Id transaksi harus unik" class="form-control" type="text" title="Minimal 3 karakter. Hanya huruf dan angka" pattern="^[A-Za-z0-9]{3,8}$" minlength="3" maxlength="8" autocomplete="off" required>
             </div>
           </div>
           <div class="form-group">
@@ -291,7 +291,7 @@ include 'header.php'
             <div class="form-group hidden hilang">
               <label class="control-label col-md-3">Id Barang</label>
               <div class="col-md-9">
-                <input placeholder="Id barang harus unik" class="form-control inputid" type="text" title="Hanya huruf dan angka" pattern="^[A-Za-z0-9]{5,10}$" minlength="5" maxlength="10" autocomplete="off" required>
+                <input placeholder="Id barang harus unik" class="form-control inputid" type="text" title="Minimal 5 karakter. Hanya huruf dan angka" pattern="^[A-Za-z0-9]{5,10}$" minlength="5" maxlength="10" autocomplete="off">
               </div>
             </div>
             <div class="form-group">
@@ -349,13 +349,24 @@ include 'header.php'
         <div class="form-group">
           <label class="control-label col-md-3">Id Produk</label>
           <div class="col-md-9">
-            <input name="idproduk" id="idproduk" placeholder="Id produk harus beda satu sama lain" class="form-control" type="text" title="Hanya huruf dan angka" pattern="^[A-Za-z0-9]{5,10}$" minlength="5" maxlength="10" autocomplete="off" required>
+            <input name="idproduk" id="idproduk" placeholder="Id produk harus beda satu sama lain" class="form-control" type="text" title="Minimal 5 karakter. Hanya huruf dan angka" pattern="^[A-Za-z0-9]{5,10}$" minlength="5" maxlength="10" autocomplete="off" required>
           </div>
         </div>
         <div class="form-group">
           <label class="control-label col-md-3">Nama Produk</label>
           <div class="col-md-9">
             <input name="nama" id="nama" placeholder="Masukkan nama produk" class="form-control" type="text" autocomplete="off" title="Minimal 5 karakter, maksimal 30 karakter. Karakter spesial diperbolehkan" pattern="^.{5,30}$" type="text" minlength="5" maxlength="30" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-md-3">Kategori</label>
+          <div class="col-md-9">
+            <select class="form-control" name="kategori" required>
+              <option value="">--Pilih Kategori--</option>
+              <option value="makanan">Makanan</option>
+              <option value="minuman">Minuman</option>
+              <option value="lain">Lain-lain</option>
+            </select>
           </div>
         </div>
         <div class="modal-header">
@@ -392,7 +403,7 @@ include 'header.php'
       </div>
       </div>
       <div class="modal-footer">
-        <input type="submit" id="btnSave2" class="btn btn-default" value="Simpan"/>
+        <input type="submit" id="btnSave3" class="btn btn-default" value="Simpan"/>
         <button type="button" class="btn btn-default batal1" data-dismiss="modal">Batal</button>
       </div>
     </form>
@@ -401,24 +412,24 @@ include 'header.php'
 </div><!-- /.modal -->
 <!-- End Bootstrap modal -->
 
-	<!-- Datatables -->
-    <script src="<?php echo base_url('vendors/datatables.net/js/jquery.dataTables.min.js'); ?>"></script>
-    <script src="<?php echo base_url('vendors/datatables.net-bs/js/dataTables.bootstrap.min.js'); ?>"></script>
-    <script src="<?php echo base_url('vendors/datatables.net-responsive/js/dataTables.responsive.min.js'); ?>"></script>
-    <script src="<?php echo base_url('vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js'); ?>"></script>
-    <script src="<?php echo base_url('vendors/datatables.net-scroller/js/dataTables.scroller.min.js'); ?>"></script>
-    <script src="<?php echo base_url('vendors/jszip/dist/jszip.min.js'); ?>"></script>
-    <script src="<?php echo base_url('vendors/pdfmake/build/pdfmake.min.js'); ?>"></script>
-    <script src="<?php echo base_url('vendors/pdfmake/build/vfs_fonts.js'); ?>"></script>
-    <!-- Custom Theme Scripts -->
-    <script src="<?php echo base_url('build/js/custom.min.js'); ?>"></script>
+<!-- Datatables -->
+<script src="<?php echo base_url('vendors/datatables.net/js/jquery.dataTables.min.js'); ?>"></script>
+<script src="<?php echo base_url('vendors/datatables.net-bs/js/dataTables.bootstrap.min.js'); ?>"></script>
+<script src="<?php echo base_url('vendors/datatables.net-responsive/js/dataTables.responsive.min.js'); ?>"></script>
+<script src="<?php echo base_url('vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js'); ?>"></script>
+<script src="<?php echo base_url('vendors/datatables.net-scroller/js/dataTables.scroller.min.js'); ?>"></script>
+<script src="<?php echo base_url('vendors/jszip/dist/jszip.min.js'); ?>"></script>
+<script src="<?php echo base_url('vendors/pdfmake/build/pdfmake.min.js'); ?>"></script>
+<script src="<?php echo base_url('vendors/pdfmake/build/vfs_fonts.js'); ?>"></script>
+<!-- Custom Theme Scripts -->
+<script src="<?php echo base_url('build/js/custom.min.js'); ?>"></script>
 	<script>
 
   var flag =1;
   var pesan;
   //init datatable
-	$('#myTable').dataTable({
-		responsive:true
+	$('#myTable').DataTable({
+		responsive:false
 	});
 
   //details details barang masuk
@@ -432,7 +443,7 @@ include 'header.php'
   //show details barang masuk
     $(document).ready(function(){
       var table = $('#myTable1').DataTable({
-        responsive:true
+        responsive:false
       });
 
       $('#myTable1 tbody').on('click', 'td button.details', function () {
@@ -510,7 +521,7 @@ include 'header.php'
         //show details produk
           $(document).ready(function(){
             var table = $('#myTable3').DataTable({
-              responsive:true
+              responsive:false
             });
 
             $('#myTable3 tbody').on('click', 'td button.details', function () {
@@ -546,7 +557,7 @@ include 'header.php'
       var id2 = parseInt($(this).closest('div.input').prop('id'));
       var idsbaru = id2+1;
         $("#form-body").append('<div class="input" id="'+idsbaru+'"><div class="form-group hidden hilang"><label class="control-label col-md-3">Id Barang</label>'
-      +'<div class="col-md-9"><input placeholder="Id barang harus unik" class="form-control inputid" type="text" title="Hanya huruf dan angka" pattern="^[A-Za-z0-9]{5,10}$" minlength="5" maxlength="10" autocomplete="off" required></div></div>'
+      +'<div class="col-md-9"><input placeholder="Id barang harus unik" class="form-control inputid" type="text" title="Minimal 5 karakter. Hanya huruf dan angka" pattern="^[A-Za-z0-9]{5,10}$" minlength="5" maxlength="10" autocomplete="off" required></div></div>'
       +'<div class="form-group"><label class="control-label col-md-3">Nama Barang</label><div class="col-md-7">'
       +'<input type="text" name="nama[]" value="" placeholder="Masukkan nama barang" class="form-control barang" autocomplete="on" title="Minimal 5 karakter, maksimal 30 karakter. Karakter spesial diperbolehkan" pattern="^.{5,30}$" type="text" minlength="3" maxlength="30" required>'
       +'<input type="hidden" name="pil[]" value="" class="isiid"><div class="daftarbarang" id="daftarbarang"></div></div></div>'
@@ -684,8 +695,11 @@ include 'header.php'
   		blur: function() {
         clearSelection();
   		   if (ok == 1)
-  		   {
-  			$this.text(this.value);
+  		   { if(kolom == 'harga'){
+    			$this.text('Rp. '+this.value);
+         }else{
+    			$this.text(this.value);
+         }
   			}
   			else{
   				$this.text(teks);
@@ -809,6 +823,8 @@ include 'header.php'
               $('#'+idroot+' div.daftarbarang').html(data);
             }
           });
+        }else{
+          $('#'+idroot+' div.daftarbarang').fadeOut();
         }
       });
 
@@ -825,6 +841,7 @@ include 'header.php'
           $('#'+idroot+' div.hilang').attr('class','form-group hilang');
           $('#'+idroot+' input.isiid').removeAttr('name');
           $('#'+idroot+' input.inputid').attr('name','pil[]');
+          $('#'+idroot+' input.inputid').attr('required','required');
           $('#'+idroot+' div.daftarbarang').fadeOut();
         }else{
           $('#'+idroot+' input.barang').val($(this).text());

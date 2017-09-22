@@ -20,7 +20,7 @@ include 'header.php'
 
     <title>Gentelella Alela! | </title>
 
-        <!-- Bootstrap -->
+    <!-- Bootstrap -->
     <link href="<?php echo base_url('vendors/bootstrap/dist/css/bootstrap.min.css'); ?>" rel="stylesheet">
     <!-- Font Awesome -->
     <link href="<?php echo base_url('vendors/font-awesome/css/font-awesome.min.css'); ?>" rel="stylesheet">
@@ -35,7 +35,7 @@ include 'header.php'
     <link href="<?php echo base_url('vendors/jqvmap/dist/jqvmap.min.css'); ?>" rel="stylesheet"/>
     <!-- bootstrap-daterangepicker -->
     <link href="<?php echo base_url('vendors/bootstrap-daterangepicker/daterangepicker.css'); ?>" rel="stylesheet">
-	<!-- Datatables -->
+	   <!-- Datatables -->
     <link href="<?php echo base_url('vendors/datatables.net-bs/css/dataTables.bootstrap.min.css'); ?>" rel="stylesheet">
     <link href="<?php echo base_url('vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css'); ?>" rel="stylesheet">
     <link href="<?php echo base_url('vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css'); ?>" rel="stylesheet">
@@ -165,7 +165,7 @@ include 'header.php'
             <div class="form-group">
               <label class="control-label col-md-3">Id Transaksi</label>
               <div class="col-md-9">
-                <input name="idtrans" id="idtrans" placeholder="Id transaksi harus unik" class="form-control" type="text" title="Hanya huruf dan angka" pattern="^[A-Za-z0-9]{3,7}$" minlength="3" maxlength="7" autocomplete="off" required>
+                <input name="idtrans" id="idtrans" placeholder="Id transaksi harus unik" class="form-control" type="text" title="Minimal 3 karakter. Hanya huruf dan angka" pattern="^[A-Za-z0-9]{3,7}$" minlength="3" maxlength="7" autocomplete="off" required>
               </div>
             </div>
             <div class="form-group">
@@ -185,6 +185,7 @@ include 'header.php'
                     <?php }?>
                   </select>
                   <input type="hidden" name="nama[]" value="" class="nama">
+                  <input type="hidden" name="kategori[]" value="" class="kategori">
                 </div>
                 </div>
                 <div class="form-group">
@@ -245,7 +246,7 @@ include 'header.php'
                 </div>
                 <label class="control-label col-md-2" style="padding-left:3px">Satuan</label>
                 <div class="col-md-3 colsatuan" >
-                  <input name="satuan" value="" id="" class="form-control satuan" type="text" placeholder="kg, pc, dll"  title="Minimal 3 karakter, maksimal 15 karakter. Karakter spesial diperbolehkan" pattern="^.{3,15}$" readOnly minlength="3" maxlength="15" autocomplete="off" required>
+                  <input name="satuan" value="" id="" class="form-control satuan" type="text" placeholder="kg, pc, dll"  title="Minimal 3 karakter, maksimal 15 karakter. Karakter spesial diperbolehkan" pattern="^.{3,15}$" minlength="3" maxlength="15" autocomplete="off" required>
                 </div>
               </div>
             </div>
@@ -303,9 +304,9 @@ include 'header.php'
   var pesan;
 
   //init datatable
-	$('#myTable, #myTable1').dataTable({
-		responsive:true
-	});
+	$('#myTable, #myTable1').DataTable({
+    responsive:false
+  });
 
   //tampil produk
 	function lihatbarang(id){
@@ -321,10 +322,10 @@ include 'header.php'
 				$('#myTable').DataTable().destroy();
 				$('#myTable tbody').html(data);
 				$(document).ready(function() {
-					$('#myTable').dataTable({
-						responsive:true
-					});
-				} );
+					$('#myTable').DataTable({
+            responsive:false
+          });
+				});
 			}
 		});
 	}
@@ -344,9 +345,9 @@ include 'header.php'
         $('#myTable1 tbody').html(data);
         $(document).ready(function() {
           tabel =  $('#myTable1').DataTable({
-            responsive:true
+            responsive:false
           });
-        } );
+        });
       }
     });
   }
@@ -393,12 +394,13 @@ include 'header.php'
   var idcabang = e.children('option').filter(':selected').val();
 	var id = $(this).closest('tr').find('td.idbarang').text();
   var where = $(this).closest('tr').find('td.idbarang').prop('id');
-  var tabel = $(this).attr('name');
+  var tabel = $(this).closest('tr').attr('name');
 	var kolom = $(this).attr('id');
 	var teks = $(this).html();
 	var $this = $(this);
   var isian = $this.text();
   isian = isian.replace(' Rp. ','');
+  console.log(tabel+kolom+id+where);
 	var $input = $('<input>', {
 		value: isian,
     id: 'input'+kolom,
@@ -406,8 +408,9 @@ include 'header.php'
 		blur: function() {
       clearSelection();
 		   if (ok == 1)
-		   {
-			$this.text(this.value);
+		   { if(kolom == 'harga'){
+         $this.text('Rp. '+this.value);
+       }else{$this.text(this.value);}
 			}
 			else{
 				$this.text(teks);
@@ -457,6 +460,18 @@ include 'header.php'
     });
   });
 
+  //valdiasi nama
+  $(document).ready(function() {
+    $(document).on('input', 'input#inputnama', function(){
+      pesan = "Minimal 5 karakter, maksimal 30 karakter. \nKarakter spesial diperbolehkan";
+      var value = $(this).val();
+      var patt = new RegExp("^.{5,30}$");
+      var valid = patt.test(value);
+      if(valid){$(this).removeClass("invalid").addClass("valid"); flag=1;}
+         else{$(this).removeClass("valid").addClass("invalid"); flag=0;}
+    });
+  });
+
   //hapus data barang
 	function hapus(id)
     {
@@ -491,7 +506,7 @@ include 'header.php'
         var idsbaru = id2+1;
         $("#form-body").append('<div class="input" id="'+idsbaru+'"><div class="form-group"><label class="control-label col-md-3">Nama Barang</label><div class="col-md-7">'
         +'<select name="pil[]" class="form-control pilproduk" onchange="" required><option value="" selected>--Pilih--</option><?php foreach($produk as $d){?>'
-        +'<option value="<?php echo $d->idproduk?>"><?php echo $d->nama?></option><?php }?></select><input type="hidden" name="nama[]" value="" class="nama"></div></div>'
+        +'<option value="<?php echo $d->idproduk?>"><?php echo $d->nama?></option><?php }?></select><input type="hidden" name="nama[]" value="" class="nama"><input type="hidden" name="kategori[]" value="" class="kategori"></div></div>'
         +'<div class="form-group"><label class="control-label col-md-3">Jumlah</label><div class="col-md-3"><input name="jml[]" id="jml" placeholder="Jumlah produk" class="form-control" type="text" title="Hanya angka diperbolehkan" pattern="^[1-9][0-9]{0,11}$" maxlength="11" autocomplete="off" required></div>'
         +'<label class="control-label col-md-1" style="padding-left:3px">Harga</label><div class="col-md-3 colharga"><input name="harga[]" id="harga" placeholder="Harga produk" class="form-control" type="text" disabled></div>'
         +'<div class="col-md-1"><a class="btn btn-primary btn-sm plus" id="'+idbaru+'"><i class="fa fa-plus"></i></a></div>'
@@ -530,8 +545,10 @@ include 'header.php'
         $('#'+idroot+' input.nama').val(nama);
         $.get({
           url : '<?php echo site_url('data/hargaproduk/') ?>'+id,
+          dataType:'json',
           success: function(data){
-            $('#'+idroot+' div.colharga').html(data);
+            $('#'+idroot+' div.colharga').html(data.output1);
+            $('#'+idroot+' input.kategori').val(data.output2);
           }
         });
       });

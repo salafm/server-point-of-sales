@@ -23,10 +23,10 @@ class Data extends CI_Controller{
 		$data = $this->mdata->tampil_where('barangclient', $where)->result();
 		$no = 1;
 		foreach($data as $d){
-		echo '<tr id="'.$d->id.'"><td>'.$no++.'</td>
+		echo '<tr id="'.$d->id.'" name="barangclient"><td>'.$no++.'</td>
 		  <td title="Kolom ini tidak bisa diedit" class="idbarang" id="idbarang">'.$d->idbarang.'</td>
-		  <td title="Kolom ini tidak bisa diedit" class="nama" id="">'.$d->nama.'</td>
-		  <td title="Double click untuk edit and tekan Enter untuk menyimpan" class="edit harga" id="harga" name="barangclient"> Rp. '.$d->harga.'</td>
+		  <td title="Double click untuk edit and tekan Enter untuk menyimpan" class="edit nama" id="nama">'.$d->nama.'</td>
+		  <td title="Double click untuk edit and tekan Enter untuk menyimpan" class="edit harga" id="harga"> Rp. '.$d->harga.'</td>
 		  <td title="Kolom ini tidak bisa diedit" class="stok" id="">'.$d->stok.'</td>
 		  <td title="Kolom ini tidak bisa diedit" class="satuan" id="">'.$d->satuan.'</td>
 		  <td><button class="btn btn-default btn-sm setting" ><i class="fa fa-cogs"></i> Pengaturan</button></td>
@@ -39,10 +39,10 @@ class Data extends CI_Controller{
 		$data = $this->mdata->tampil_where('produkclient', $where)->result();
 		$no = 1;
 		foreach($data as $da){
-		echo '<tr id="'.$da->idproduk.'"><td>'.$no++.'</td>
+		echo '<tr id="'.$da->idproduk.'" name="produkclient"><td>'.$no++.'</td>
 		  <td title="Kolom ini tidak bisa diedit" class="idbarang" id="idproduk">'.$da->idproduk.'</td>
-		  <td title="Kolom ini tidak bisa diedit" class="nama" id="nama">'.$da->nama.'</td>
-		  <td title="Double click untuk edit and tekan Enter untuk menyimpan" class="edit" id="harga" name="produkclient"> Rp. '.$da->harga.'</td>
+		  <td title="Double click untuk edit and tekan Enter untuk menyimpant" class="edit nama" id="nama">'.$da->nama.'</td>
+		  <td title="Double click untuk edit and tekan Enter untuk menyimpan" class="edit" id="harga"> Rp. '.$da->harga.'</td>
 		  <td title="Kolom ini tidak bisa diedit" class="" id="stok">'.$da->stok.'</td>
 			<td><button class="btn btn-default btn-sm details" id=""><i class="fa fa-info-circle"></i>  &nbsp;details</button></td>
 		  <td><button class="btn btn-danger btn-xs" onclick="hapus('.$da->id.')"><i class="fa fa-remove"></i></button></td></tr>';
@@ -57,6 +57,7 @@ class Data extends CI_Controller{
 		$idtrans = 'out'.$idtrans;
 		$idproduk = $this->input->post('pil',true);
 		$nama = $this->input->post('nama',true);
+		$kategori = $this->input->post('kategori',true);
 		$harga = $this->input->post('harga',true);
 		$desk = $this->input->post('desk',true);
 		$jml = $this->input->post('jml',true);
@@ -88,7 +89,8 @@ class Data extends CI_Controller{
 						'idcabang' => $id,
 		        'idproduk' => $idproduk[$i],
 						'nama' => $nama[$i],
-						'harga' => $harga[$i]
+						'harga' => $harga[$i],
+						'kategori' => $kategori[$i]
 				);
 				$this->mdata->simpan('produkclient',$inputprodukclient);								//simpan produkclient
 			}
@@ -171,7 +173,10 @@ class Data extends CI_Controller{
   {
     $where = array('idproduk' => $id);
     $data = $this->mdata->tampil_where('produk', $where)->result();
-    echo '<input name="harga[]" id="" value="'.$data[0]->harga.'" class="form-control harga" placeholder="Harga produk" type="text" readOnly>';
+    $output1 =  '<input name="harga[]" id="" value="'.$data[0]->harga.'" class="form-control harga" placeholder="Harga produk" type="text" readOnly>';
+		$output2 = $data[0]->kategori;
+		$output = array('output1' => $output1, 'output2' => $output2);
+		echo json_encode($output);
   }
 
 	function detailproduk()
@@ -202,7 +207,7 @@ class Data extends CI_Controller{
 		$jumlah = $stok*$jml;
 		$harga = $harga/$jml;
 		$where = array('idcabang' => $id, 'idbarang' => $idbarang );
-		$update = array('stok' => $jumlah, 'satuan' => $satuan, 'harga' => $harga);
+		$update = array('stok' => $jumlah, 'satuan' => $satuan, 'harga' => $harga, 'flag' => 0, 'cons' => $jml);
 		$this->mdata->update($where,$update,'barangclient');
 
 		$hasil = $this->mdata->tampil_where('produkclient_details',$where)->result();
@@ -263,7 +268,7 @@ class Data extends CI_Controller{
 		}
 
 		$where2 = array('idcabang' => $idcabang, 'idproduk' => $idproduk);
-		$update2 = array('harga' => $total);
+		$update2 = array('harga' => $total, 'flag' => 0);
 		$this->mdata->update($where2,$update2,'produkclient');
 		if ($this->db->trans_status() === FALSE)
 		{
@@ -290,7 +295,8 @@ class Data extends CI_Controller{
 				$kolomwhere = $this->input->post('where',true);
 
         $fields = array(
-          $kolom => $isi
+          $kolom => $isi,
+					'flag' => 0
         );
 				$where = array(
 					'idcabang' => $idcabang,
@@ -298,6 +304,9 @@ class Data extends CI_Controller{
 				);
 
         $this->mdata->editsimpan($where,$fields,$table);
+				if($table== 'barangclient' && $kolom == 'harga'){
+          $this->updateharga($id,$idcabang);
+        }
 				if ($this->db->trans_status() === FALSE)
 				{
 								$this->db->trans_rollback();
@@ -307,5 +316,27 @@ class Data extends CI_Controller{
 								$this->db->trans_commit();
 				}
         echo "Data berhasil disimpan";
+  }
+
+	function updateharga($id,$idcabang)
+  {
+    $this->db->trans_begin();
+    $produk = $this->mdata->tampil_where('produkclient_details',array('idbarang' => $id,'idcabang' => $idcabang))->result();
+    foreach ($produk as $p) {
+      $total = 0;
+      $hasil = $this->mdata->tampil_join4('produkclient_details',$p->idproduk,$idcabang)->result();
+      foreach ($hasil as $h) {
+        $total = $total + ($h->jumlah*$h->harga);
+      }
+      $this->mdata->update(array('idproduk' => $p->idproduk, 'idcabang' => $idcabang ), array('harga' => $total,'flag' => 0),'produkclient');
+      if ($this->db->trans_status() === FALSE)
+      {
+              $this->db->trans_rollback();
+      }
+      else
+      {
+              $this->db->trans_commit();
+      }
+    }
   }
 }

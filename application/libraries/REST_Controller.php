@@ -587,10 +587,10 @@ abstract class REST_Controller extends CI_Controller {
         $this->_end_rtime = microtime(TRUE);
 
         // Log the loading time to the log table
-        if ($this->config->item('rest_enable_logging') === TRUE)
-        {
-            $this->_log_access_time();
-        }
+        //if ($this->config->item('rest_enable_logging') === TRUE)
+      //  {
+      //      $this->_log_access_time();
+        //}
     }
 
     /**
@@ -2112,7 +2112,7 @@ abstract class REST_Controller extends CI_Controller {
         $this->load->model('mdata');
         $whitelist = explode(',', $this->mdata->apiip());
 
-        array_push($whitelist, '::1', '127.0.0.1', '0.0.0.0');
+        array_push($whitelist, '127.0.0.1', '0.0.0.0');
 
         foreach ($whitelist as &$ip)
         {

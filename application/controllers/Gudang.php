@@ -43,6 +43,10 @@ class Gudang extends CI_Controller
       $where = array('idbarang' => $idbarang[$i], 'nama' => $nama[$i]);
       $cek = $this->mdata->tampil_where('barang', $where)->num_rows();
       if($cek>0){
+        $update = array(
+          'harga' => $harga[$i]
+        );
+        $this->mdata->update($where,$update,'barang');
         $input = array(
           'idbarang' => $idbarang[$i],
           'harga' => $harga[$i],
@@ -89,6 +93,7 @@ class Gudang extends CI_Controller
     $this->db->trans_begin();
     $idproduk = $this->input->post('idproduk',true);
     $idbarang = $this->input->post('pil',true);
+    $kategori = $this->input->post('kategori',true);
     $nama = $this->input->post('nama',true);
     $jml = $this->input->post('jml',true);
     $total = 0;
@@ -104,7 +109,7 @@ class Gudang extends CI_Controller
       $total = $total + ($hasil[0]->harga * $jml[$i]);
     }
 
-    $input2 = array('idproduk' => $idproduk, 'nama' => $nama, 'harga' => $total);
+    $input2 = array('idproduk' => $idproduk, 'nama' => $nama, 'kategori' => $kategori, 'harga' => $total);
     $this->mdata->simpan('produk',$input2);
     if ($this->db->trans_status() === FALSE)
     {
@@ -249,7 +254,7 @@ class Gudang extends CI_Controller
 				);
 
         $this->mdata->editsimpan($where,$fields,$table);
-        if($kolom == 'harga'){
+        if($table== 'barang' && $kolom == 'harga'){
           $this->updateharga($id);
         }
 				if ($this->db->trans_status() === FALSE)
