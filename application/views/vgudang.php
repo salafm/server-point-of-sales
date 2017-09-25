@@ -276,12 +276,6 @@ include 'header.php'
         <input type="hidden" value="" name="barang"/>
         <div class="form-body" id="form-body">
           <div class="form-group">
-            <label class="control-label col-md-3">Id Transaksi</label>
-            <div class="col-md-9">
-              <input name="idtrans" id="idtrans" placeholder="Id transaksi harus unik" class="form-control" type="text" title="Minimal 3 karakter. Hanya huruf dan angka" pattern="^[A-Za-z0-9]{3,8}$" minlength="3" maxlength="8" autocomplete="off" required>
-            </div>
-          </div>
-          <div class="form-group">
             <label class="control-label col-md-3">Deskripsi</label>
             <div class="col-md-9">
               <input name="desk" id="desk" placeholder="Deskripsi transaksi" class="form-control" type="text" maxlength="50" autocomplete="off">
@@ -557,7 +551,7 @@ include 'header.php'
       var id2 = parseInt($(this).closest('div.input').prop('id'));
       var idsbaru = id2+1;
         $("#form-body").append('<div class="input" id="'+idsbaru+'"><div class="form-group hidden hilang"><label class="control-label col-md-3">Id Barang</label>'
-      +'<div class="col-md-9"><input placeholder="Id barang harus unik" class="form-control inputid" type="text" title="Minimal 5 karakter. Hanya huruf dan angka" pattern="^[A-Za-z0-9]{5,10}$" minlength="5" maxlength="10" autocomplete="off" required></div></div>'
+      +'<div class="col-md-9"><input placeholder="Id barang harus unik" class="form-control inputid" type="text" title="Minimal 5 karakter. Hanya huruf dan angka" pattern="^[A-Za-z0-9]{5,10}$" minlength="5" maxlength="10" autocomplete="off"></div></div>'
       +'<div class="form-group"><label class="control-label col-md-3">Nama Barang</label><div class="col-md-7">'
       +'<input type="text" name="nama[]" value="" placeholder="Masukkan nama barang" class="form-control barang" autocomplete="on" title="Minimal 5 karakter, maksimal 30 karakter. Karakter spesial diperbolehkan" pattern="^.{5,30}$" type="text" minlength="3" maxlength="30" required>'
       +'<input type="hidden" name="pil[]" value="" class="isiid"><div class="daftarbarang" id="daftarbarang"></div></div></div>'
@@ -639,6 +633,7 @@ include 'header.php'
 
     //simpan stok
     $('#form').submit(function(e) {
+      console.log($("#form").serialize());
       $.ajax({
         url : '<?php echo site_url('gudang/updatestok');?>',
         type: 'POST',
@@ -646,12 +641,12 @@ include 'header.php'
         dataType: 'JSON',
         success: function(response){
            $('#modal_form_bahan').modal('hide');
-           alert('Berhasil menambahkan stok');
+           alert('Berhasil menambahkan barang');
            location.reload();
         },
         error: function (jqXHR, textStatus, errorThrown)
         {
-          alert('Gagal menambahkan data \n'+errorThrown);
+          alert('Gagal menambahkan barang \n'+errorThrown);
         }
       });
       e.preventDefault();
@@ -671,7 +666,7 @@ include 'header.php'
         },
         error: function (jqXHR, textStatus, errorThrown)
     		{
-    			alert('Gagal menambahkan data \n'+errorThrown);
+    			alert('Gagal menambahkan produk \n'+errorThrown);
     		}
       });
       e.preventDefault();
@@ -781,7 +776,7 @@ include 'header.php'
        if(confirm('Apa anda yakin akan menghapus data ini?'))
        {
          $.ajax({
-           url : "<?php echo site_url('data/hapus')?>/"+id,
+           url : "<?php echo site_url('gudang/hapus')?>/"+id,
            type: "POST",
            data : {'tabel' : tabel},
            dataType: "JSON",
@@ -792,7 +787,7 @@ include 'header.php'
            },
            error: function (jqXHR, textStatus, errorThrown)
            {
-               alert('Gagal menghapus data');
+               alert('Gagal menghapus data. Barang masih digunakan di produk');
            }
          });
        }

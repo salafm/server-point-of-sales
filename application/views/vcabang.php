@@ -5,6 +5,11 @@ include 'header.php'
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <style media="screen">
+      h4.modal-title{
+        display: none !important;
+      }
+    </style>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <!-- Meta, title, CSS, favicons, etc. -->
     <meta charset="utf-8">
@@ -159,60 +164,82 @@ include 'header.php'
 	</div>
 
 	<!-- Bootstrap modal -->
-  <div class="modal fade" id="modal_form" role="dialog">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h3 class="modal-title">Tambah Cabang</h3>
-      </div>
+  <div class="modal fade multi-step" id="modal_form" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h3 class="modal-title">Tambah Cabang</h3>
+          <h4 class="modal-title step-1" data-step="1">Step 1</h4>
+          <h4 class="modal-title step-2" data-step="2">Step 2</h4>
+        </div>
         <form action="#" id="form" class="form-horizontal" name="formcabang" method="post">
-          <div class="modal-body form">
-          <input type="hidden" value="" name="cabang"/>
-          <div class="form-body">
-            <div class="form-group">
-              <label class="control-label col-md-3">Nama Cabang</label>
-              <div class="col-md-9">
-                <input name="nama" id="name" placeholder="Masukkan nama cabang" class="form-control" title="Minimal 5 karakter. Hanya huruf, angka dan karakter spesial(petik atas, titik, spasi, strip)" pattern="^[A-Za-z0-9.' -]{5,30}$" type="text" minlength="5" maxlength="30" autocomplete="off" required>
-                <span class="btn-danger" id="errornama"></span>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="control-label col-md-3">Username</label>
-              <div class="col-md-9">
-                <input name="user" id="users" placeholder="Username tidak boleh sama dengan yg lain" class="form-control" title="Minimal 5 karakter. Hanya huruf, angka dan titik" pattern="^[a-zA-Z][a-zA-Z0-9.]{4,15}$" minlength="5" maxlength="15" type="text" autocomplete="off" required>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="control-label col-md-3">Password</label>
-              <div class="col-md-9">
-				          <input name="pass" id="passw" placeholder="Masukkan password" class="form-control" title="Password minimal 8 karakter, minimal 1 Uppercase, dan 1 angka" type="password" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$" minlength="8" maxlength="30" autocomplete="off" required>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="control-label col-md-3">Ip Address</label>
-              <div class="col-md-9">
-				          <input name="ip" id="ip" placeholder="Format ipv4" title="Format ipv4" class="form-control" type="text" autocomplete="off" pattern="((^|\.)((25[0-5])|(2[0-4]\d)|(1\d\d)|([1-9]?\d))){4}$" required>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="control-label col-md-3">API Key</label>
-              <div class="col-md-9">
-				          <input name="api" id="api" placeholder="Klik generate API Key untuk mendapatkan API Key" class="form-control readonly"  type="text" required>
-              </div>
-            </div>
+        <div class="modal-body step step-1 form">
+          <div class="form-group">
+        	  <label class="control-label col-md-3">Nama Cabang</label>
+        	  <div class="col-md-9">
+        		<input name="nama" id="name" placeholder="Masukkan nama cabang" class="form-control" title="Minimal 5 karakter. Hanya huruf, angka dan karakter spesial(petik atas, titik, spasi, strip)" pattern="^[A-Za-z0-9.' -]{5,30}$" type="text" minlength="5" maxlength="30" autocomplete="off" required>
+        	  </div>
+        	</div>
+        	<div class="form-group">
+        	  <label class="control-label col-md-3">Email</label>
+        	  <div class="col-md-9">
+        		<input name="email" id="email2" placeholder="Masukkan email" class="form-control" title="Email harus valid" maxlength="30"  type="email" autocomplete="off" required>
+
+        	  </div>
+        	</div>
+        	<div class="form-group">
+        	  <label class="control-label col-md-3">Telepon</label>
+        	  <div class="col-md-9">
+        		<input name="telfon" id="telfon" placeholder="Masukkan nomor telp." class="form-control" title="Minimal 10 karakter. Hanya angka." pattern="^[0-9]{10,13}$" type="text" minlength="10" maxlength="13" autocomplete="off" required>
+
+        	  </div>
+        	</div>
+        	<div class="form-group">
+        	  <label class="control-label col-md-3">Nama Cabang</label>
+        	  <div class="col-md-9">
+        		<textarea name="alamat" id="alamat" placeholder="Masukkan alamat" class="form-control" autocomplete="off" required></textarea>
+        	  </div>
+        	</div>
+        </div>
+        <div class="modal-body step step-2 form">
+          <div class="form-group">
+          <label class="control-label col-md-3">Username</label>
+          <div class="col-md-9">
+            <input name="user" id="users" placeholder="Username tidak boleh sama dengan yg lain" class="form-control" title="Minimal 5 karakter. Hanya huruf, angka dan titik" pattern="^[a-zA-Z][a-zA-Z0-9.]{4,15}$" minlength="5" maxlength="15" type="text" autocomplete="off" required>
           </div>
           </div>
-          <div class="modal-footer">
-            <a class="btn btn-default btn-sm" onclick="generateAPI()"><span class="fa fa-key"></span> Generate API Key</a>
-            <input type="submit" id="btnSave" value="Simpan" class="btn btn-default"/>
-            <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
+          <div class="form-group">
+          <label class="control-label col-md-3">Password</label>
+          <div class="col-md-9">
+          		  <input name="pass" id="passw" placeholder="Masukkan password" class="form-control" title="Password minimal 8 karakter, minimal 1 Uppercase, dan 1 angka" type="password" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$" minlength="8" maxlength="30" autocomplete="off" required>
           </div>
-        </form>
-        </div><!-- /.modal-content -->
-      </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-  <!-- End Bootstrap modal -->
+          </div>
+          <div class="form-group">
+          <label class="control-label col-md-3">Ip Address</label>
+          <div class="col-md-9">
+          		  <input name="ip" id="ip" placeholder="Format ipv4" title="Format ipv4" class="form-control" type="text" autocomplete="off" pattern="((^|\.)((25[0-5])|(2[0-4]\d)|(1\d\d)|([1-9]?\d))){4}$" required>
+          </div>
+          </div>
+          <div class="form-group">
+          <label class="control-label col-md-3">API Key</label>
+          <div class="col-md-9">
+          		  <input name="api" id="api" placeholder="Klik generate API Key untuk mendapatkan API Key" class="form-control readonly"  type="text" required>
+          </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default step step-1 pull-left" data-step="1" onclick="sendEvent()">Selanjutnya</button>
+          <button type="button" class="btn btn-default step step-2 pull-left" data-step="2" onclick="sendEvent2()">Sebelumnya</button>
+          <a class="btn btn-default btn-sm" onclick="generateAPI()"><span class="fa fa-key"></span> Generate API Key</a>
+          <input type="submit" id="btnSave" value="Simpan" class="btn btn-default"/>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
+        </div>
+      </form>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+<!-- End Bootstrap modal -->
 
   <!-- Bootstrap modal -->
 <div class="modal fade" id="modal_form_petugas" role="dialog">
@@ -263,7 +290,9 @@ include 'header.php'
   </div><!-- /.modal -->
 <!-- End Bootstrap modal -->
 
-	<!-- Datatables -->
+    <!-- jQuery -->
+    <script src="<?php echo base_url('vendors/jquery/dist/jquery.step.js'); ?>"></script>
+	   <!-- Datatables -->
     <script src="<?php echo base_url('vendors/datatables.net/js/jquery.dataTables.min.js'); ?>"></script>
     <script src="<?php echo base_url('vendors/datatables.net-bs/js/dataTables.bootstrap.min.js'); ?>"></script>
     <script src="<?php echo base_url('vendors/datatables.net-responsive/js/dataTables.responsive.min.js'); ?>"></script>
@@ -276,6 +305,13 @@ include 'header.php'
     <script src="<?php echo base_url('build/js/custom.min.js'); ?>"></script>
 	<script>
 
+  sendEvent = function() {
+      $('#modal_form').trigger('next.m.2');
+  }
+
+  sendEvent2 = function() {
+      $('#modal_form').trigger('next.m.1');
+  }
   var flag =1;
 
 	$('#myTable,#myTable1 ').DataTable({

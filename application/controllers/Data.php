@@ -30,7 +30,7 @@ class Data extends CI_Controller{
 		  <td title="Kolom ini tidak bisa diedit" class="stok" id="">'.$d->stok.'</td>
 		  <td title="Kolom ini tidak bisa diedit" class="satuan" id="">'.$d->satuan.'</td>
 		  <td><button class="btn btn-default btn-sm setting" ><i class="fa fa-cogs"></i> Pengaturan</button></td>
-		  <td><button class="btn btn-danger btn-xs" onclick="hapus('.$d->id.')"><i class="fa fa-remove"></i></button></td></tr>';
+		  <td><button class="btn btn-danger btn-xs hapus" name="'.$d->id.'"><i class="fa fa-remove"></i></button></td></tr>';
 		}
 	}
 
@@ -45,7 +45,7 @@ class Data extends CI_Controller{
 		  <td title="Double click untuk edit and tekan Enter untuk menyimpan" class="edit" id="harga"> Rp. '.$da->harga.'</td>
 		  <td title="Kolom ini tidak bisa diedit" class="" id="stok">'.$da->stok.'</td>
 			<td><button class="btn btn-default btn-sm details" id=""><i class="fa fa-info-circle"></i>  &nbsp;details</button></td>
-		  <td><button class="btn btn-danger btn-xs" onclick="hapus('.$da->id.')"><i class="fa fa-remove"></i></button></td></tr>';
+		  <td><button class="btn btn-danger btn-xs hapus" name="'.$da->id.'"><i class="fa fa-remove"></i></button></td></tr>';
 		}
 	}
 
@@ -53,8 +53,23 @@ class Data extends CI_Controller{
 	{
 		$this->db->trans_begin();
 		$id = $this->input->post('idcabang',true);
-		$idtrans = $this->input->post('idtrans',true);
-		$idtrans = 'out'.$idtrans;
+		$idtrx = $this->db->query('SELECT MAX(id) as id FROM barangkeluar');
+		if($idtrx->num_rows()>0){
+			$idtrx = $idtrx->result();
+			$ids = $idtrx[0]->id+1;
+			if(strlen((string)$ids) == 1){
+				$ids = '000'.$ids;
+			}elseif (strlen((string)$ids) == 2) {
+				$ids = '00'.$ids;
+			}elseif (strlen((string)$ids) == 3) {
+				$ids ='0'.$ids;
+			}else{
+				$ids = $ids;
+			}
+		}else{
+			$ids = '0001';
+		}
+		$idtrans = 'out'.$id.$ids;
 		$idproduk = $this->input->post('pil',true);
 		$nama = $this->input->post('nama',true);
 		$kategori = $this->input->post('kategori',true);
@@ -157,14 +172,14 @@ class Data extends CI_Controller{
 	{
 		$this->db->trans_begin();
 		$table = $this->input->post('tabel',true);
-		$this->mdata->hapus($id,$table);
+		$this->mdata->hapus(array('id' => $id),$table);
 		if ($this->db->trans_status() === FALSE)
 		{
-		        $this->db->trans_rollback();
+						$this->db->trans_rollback();
 		}
 		else
 		{
-		        $this->db->trans_commit();
+						$this->db->trans_commit();
 		}
 		echo json_encode(array("status" => TRUE));
 	}
@@ -211,8 +226,12 @@ class Data extends CI_Controller{
 		$this->mdata->update($where,$update,'barangclient');
 
 		$hasil = $this->mdata->tampil_where('produkclient_details',$where)->result();
-		$update2 = array('jumlah' => $hasil[0]->jumlah*$jml);
-		$this->mdata->update($where,$update2,'produkclient_details');
+		foreach ($hasil as $h) {
+			$update2 = array('jumlah' => $h->jumlah*$jml);
+			$where2 = array('idcabang' => $id, 'idbarang' => $idbarang, 'idproduk' => $h->idproduk);
+			$this->mdata->update(array('idproduk' => $h->idproduk),array('flag' => 0), 'produkclient');
+			$this->mdata->update($where2,$update2,'produkclient_details');
+		}
 		if ($this->db->trans_status() === FALSE)
 		{
 						$this->db->trans_rollback();

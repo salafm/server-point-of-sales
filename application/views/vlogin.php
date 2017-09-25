@@ -43,16 +43,16 @@
           <section class="login_content">
             <form action="<?php echo site_url('login/aksi_login'); ?>" method="post">
               <h1>Masuk ke Sistem</h1>
-			  <div>
-				<p class="<?php echo $hidden; ?> btn-danger">Username atau Password salah</p>
-			  </div>
+      			  <div>
+      				<p class="<?php echo $hidden; ?> btn-danger">Username atau Password salah</p>
+      			  </div>
               <div class="input-group">
                 <input type="text" class="form-control" placeholder="Username" name="username" required="" autocomplete="off" autofocus/>
-				<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+				            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
               </div>
               <div class="input-group">
                 <input type="password" class="form-control" placeholder="Password" name="password" required="" autocomplete="off" />
-				<span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+				            <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
               </div>
               <div>
                 <button class="btn btn-default submit" type="submit" id="masuk">Masuk</button>
@@ -69,7 +69,7 @@
                 <br />
 
                 <div>
-                  <h1><i class="fa fa-cutlery"></i> Waroenk<b><i>pos</i></b></h1>
+                  <h1><i class="fa fa-cutlery"></i> Waroenk<b><i>pos</i></b> Server</h1>
                   <p>©2017 Hak Cipta dilindungi Undang-Undang. <b>Waroenkpos</b></p>
                 </div>
               </div>
@@ -83,11 +83,11 @@
               <h1>Reset Kata Sandi</h1>
               <div class="input-group">
                 <input type="text" class="form-control" placeholder="Email" required="" />
-				<span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+				            <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
               </div>
               <div>
                 <a class="btn btn-default" href="<?php echo site_url('login/masuk'); ?>">Reset Password</a>
-				<a class="btn btn-default submit" href="#signin">Batal</a>
+				        <a class="btn btn-default submit" href="#signin">Batal</a>
               </div>
 
               <div class="clearfix"></div>
@@ -98,7 +98,7 @@
                 <br />
 
                 <div>
-                  <h1><i class="fa fa-cutlery"></i> Waroenk<b><i>pos</i></b></h1>
+                  <h1><i class="fa fa-cutlery"></i> Waroenk<b><i>pos</i></b> Server</h1>
                   <p>©2017 Hak Cipta dilindungi Undang-Undang. <b>Waroenkpos</b></p>
                 </div>
               </div>
@@ -107,7 +107,7 @@
         </div>
       </div>
     </div>
-	<!-- jQuery -->
+	  <!-- jQuery -->
     <script src="<?php echo base_url('vendors/jquery/dist/jquery.min.js'); ?>"></script>
     <!-- Bootstrap -->
     <script src="<?php echo base_url('vendors/bootstrap/dist/js/bootstrap.min.js'); ?>"></script>

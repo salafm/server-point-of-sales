@@ -30,8 +30,23 @@ class Gudang extends CI_Controller
   function updatestok()
   {
     $this->db->trans_begin();
-    $idtrans = $this->input->post('idtrans',true);
-    $idtrans = 'in'.$idtrans;
+    $idtrx = $this->db->query('SELECT MAX(id) as id FROM barangmasuk');
+		if($idtrx->num_rows()>0){
+			$idtrx = $idtrx->result();
+			$ids = $idtrx[0]->id+1;
+			if(strlen((string)$ids) == 1){
+				$ids = '000'.$ids;
+			}elseif (strlen((string)$ids) == 2) {
+				$ids = '00'.$ids;
+			}elseif (strlen((string)$ids) == 3) {
+				$ids ='0'.$ids;
+			}else{
+				$ids = $ids;
+			}
+		}else{
+			$ids = '0001';
+		}
+		$idtrans = 'in'.date('md').$ids;
     $desk = $this->input->post('desk',true);
     $idbarang = $this->input->post('pil',true);
     $nama = $this->input->post('nama',true);
@@ -96,8 +111,15 @@ class Gudang extends CI_Controller
     $kategori = $this->input->post('kategori',true);
     $nama = $this->input->post('nama',true);
     $jml = $this->input->post('jml',true);
-    $total = 0;
+    
     $n = sizeof($idbarang);
+    $total = 0;
+    for ($i = 0; $i < $n; $i++){
+      $hasil = $this->mdata->harga($idbarang[$i])->result();
+      $total = $total + ($hasil[0]->harga * $jml[$i]);
+    }
+    $input2 = array('idproduk' => $idproduk, 'nama' => $nama, 'kategori' => $kategori, 'harga' => $total);
+    $this->mdata->simpan('produk',$input2);
     for ($i = 0; $i < $n; $i++){
       $input = array(
         'idbarang' => $idbarang[$i],
@@ -105,12 +127,8 @@ class Gudang extends CI_Controller
         'jumlah' => $jml[$i]
       );
       $this->mdata->simpan('produk_details',$input);
-      $hasil = $this->mdata->harga($idbarang[$i])->result();
-      $total = $total + ($hasil[0]->harga * $jml[$i]);
     }
 
-    $input2 = array('idproduk' => $idproduk, 'nama' => $nama, 'kategori' => $kategori, 'harga' => $total);
-    $this->mdata->simpan('produk',$input2);
     if ($this->db->trans_status() === FALSE)
     {
             $this->db->trans_rollback();
@@ -267,4 +285,20 @@ class Gudang extends CI_Controller
 				}
         echo "Data berhasil disimpan";
   }
+
+  function hapus($id)
+	{
+		$this->db->trans_begin();
+		$table = $this->input->post('tabel',true);
+		$this->mdata->hapus(array('id' => $id),$table);
+		if ($this->db->trans_status() === FALSE)
+		{
+		        $this->db->trans_rollback();
+		}
+		else
+		{
+		        $this->db->trans_commit();
+		}
+		echo json_encode(array("status" => TRUE));
+	}
 }

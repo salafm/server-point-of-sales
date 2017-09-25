@@ -84,7 +84,7 @@ class Api extends REST_Controller
   function cabangid_get()
   {
     $user = $this->get('user',true);
-    $id = $this->db->query('SELECT id FROM cabang WHERE user = "'.$user.'"')->result();
+    $id = $this->db->where('user',$user)->get('cabang')->result();
     $this->response($id,200);
   }
 
@@ -105,5 +105,39 @@ class Api extends REST_Controller
     }
     $this->db->where('id',$id)->update('petugas',$input);
     $this->response($id, 200);
+  }
+
+  function stokbarang_post(){
+    $id = $this->post('id',true);
+    $idbarang = $this->post('idbarang',true);
+    $stok = $this->post('stok',true);
+    if($this->db->where(array('idcabang' => $id, 'idbarang' => $idbarang))->update('barangclient',array('stok' => $stok))){
+      $this->response('Berhasil update stok', 200);
+    }else {
+      $this->response('Gagal update stok barang', 500);
+    }
+  }
+
+  function stokproduk_post(){
+    $id = $this->post('id',true);
+    $idproduk = $this->post('idproduk',true);
+    $stok = $this->post('stok',true);
+    if($this->db->where(array('idcabang' => $id, 'idproduk' => $idproduk))->update('produkclient',array('stok' => $stok))){
+      $this->response('Berhasil update stok', 200);
+    }else {
+      $this->response('Gagal update stok barang', 500);
+    }
+  }
+
+  function cekdelete_get(){
+    $id = $this->get('id',true);
+    $cabang = $this->db->where('idcabang',$id)->get('deleted')->result();
+    $this->response($cabang, 200);
+  }
+
+  function cekdelete_delete(){
+    $id = $this->get('id',true);
+    $this->db->where('idcabang',$id)->delete('deleted');
+    $this->response($id ,200);
   }
 }

@@ -114,7 +114,7 @@ class Cabang extends CI_Controller{
 	{
 		$this->db->trans_begin();
 		$tabel = $this->input->post('tabel',true);
-		$this->mdata->hapus($id,$tabel);
+		$this->mdata->hapus(array('id' => $id),$tabel);
 		if ($this->db->trans_status() === FALSE)
 		{
 		        $this->db->trans_rollback();

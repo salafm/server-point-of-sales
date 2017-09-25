@@ -163,12 +163,6 @@ include 'header.php'
           <input type="hidden" value="" name="idcabang" id="idcabang"/>
           <div class="form-body" id="form-body">
             <div class="form-group">
-              <label class="control-label col-md-3">Id Transaksi</label>
-              <div class="col-md-9">
-                <input name="idtrans" id="idtrans" placeholder="Id transaksi harus unik" class="form-control" type="text" title="Minimal 3 karakter. Hanya huruf dan angka" pattern="^[A-Za-z0-9]{3,7}$" minlength="3" maxlength="7" autocomplete="off" required>
-              </div>
-            </div>
-            <div class="form-group">
               <label class="control-label col-md-3">Deskripsi</label>
               <div class="col-md-9">
                 <input name="desk" id="" placeholder="Keterangan transaksi" class="form-control" type="text" maxlength="50" autocomplete="off">
@@ -380,7 +374,7 @@ include 'header.php'
        location.reload();
      },
      error: function (jqXHR, textStatus, errorThrown){
-       alert('Id transaksi sama atau stok barang tidak mencukupi');
+       alert('Gagal mengirim barang. Stok barang tidak mencukupi');
      }
    });
    e.preventDefault();
@@ -400,7 +394,6 @@ include 'header.php'
 	var $this = $(this);
   var isian = $this.text();
   isian = isian.replace(' Rp. ','');
-  console.log(tabel+kolom+id+where);
 	var $input = $('<input>', {
 		value: isian,
     id: 'input'+kolom,
@@ -449,6 +442,7 @@ include 'header.php'
 	}).appendTo( $this.empty() ).focus();
 	});
 
+  //validasi harga
   $(document).ready(function() {
     $(document).on('input', 'input#inputharga', function(){
       pesan = "Hanya angka diperbolehkan";
@@ -473,14 +467,19 @@ include 'header.php'
   });
 
   //hapus data barang
-	function hapus(id)
-    {
+	$(function() {
+    $(document).on('click','.hapus', function(){
+      var tabel = $(this).closest('tr').attr('name');
+      var id = $(this).attr('name');
       if(confirm('Apa anda yakin akan menghapus data ini?'))
       {
         // ajax delete data from database
           $.ajax({
-            url : "<?php echo site_url('data/hapus')?>/"+id,
+            url : "<?php echo site_url('data/hapus/')?>"+id,
             type: "POST",
+            data:{
+              'tabel' : tabel
+            },
             dataType: "JSON",
             success: function(data)
             {
@@ -489,12 +488,13 @@ include 'header.php'
             },
             error: function (jqXHR, textStatus, errorThrown)
             {
-                alert('Gagal menghapus data');
+                alert('Gagal menghapus data. Barang masih digunakan di produk');
             }
         });
-
       }
-    }
+    });
+	});
+
 
     //add input elemen tambah produk
     $(document).on('click', 'a.plus' ,function(){

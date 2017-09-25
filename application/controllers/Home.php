@@ -16,11 +16,11 @@ class Home extends CI_Controller{
 	}
 
 	function reset(){
+		$this->mdata->deleteall('produkclient');
+		$this->mdata->deleteall('produkclient_details');
 		$this->mdata->deleteall('barangclient');
 		$this->mdata->deleteall('barangkeluar');
 		$this->mdata->deleteall('barangkeluar_details');
-		$this->mdata->deleteall('produkclient');
-		$this->mdata->deleteall('produkclient_details');
 		redirect(site_url('data'));
 	}
 }

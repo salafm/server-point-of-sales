@@ -47,9 +47,9 @@ class mdata extends CI_Model{
 		$this->db->insert($table, $data);
 	}
 
-	function hapus($id,$table)
+	function hapus($where,$table)
 	{
-		$this->db->where('id',$id)->delete($table);
+		$this->db->where($where)->delete($table);
 	}
 
   function getId($user)
