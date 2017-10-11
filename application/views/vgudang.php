@@ -115,7 +115,7 @@ include 'header.php'
                                 <td title="Double click untuk edit and tekan Enter untuk menyimpan"
                                 class="edit" id="nama"><?php echo $c->nama?></td>
                                 <td title="Double click untuk edit and tekan Enter untuk menyimpan"
-                                class="edit" id="harga">Rp. <?php echo $c->harga?></td>
+                                class="edit" id="harga">Rp. <?php echo number_format($c->harga,2,",",".")?></td>
                                 <td title="Kolom ini tidak bisa diedit"
                                 class="" id="stok"><?php echo $c->stok?></td>
                                 <td title="Double click untuk edit and tekan Enter untuk menyimpan"
@@ -238,7 +238,7 @@ include 'header.php'
                                 <td title="Double click untuk edit and tekan Enter untuk menyimpan"
                                 class="edit" id="nama"><?php echo $p->nama?></td>
                                 <td title="Kolom ini tidak bisa diedit"
-                                class="" id="">Rp. <?php echo $p->harga?></td>
+                                class="" id="">Rp. <?php echo number_format($p->harga,2,",",".")?></td>
                                 <td title="Kolom ini tidak bisa diedit"
                                 class="" id=""><?php echo strftime("%A, %d/%m/%Y : %T", strtotime($p->tanggal));?></td>
                                 <td><button class="btn btn-default btn-sm details" id="">
@@ -682,7 +682,11 @@ include 'header.php'
   	var teks = $(this).html();
   	var $this = $(this);
     var isian = $this.text();
-    isian = isian.replace('Rp. ','');
+    if (kolom == 'harga') {
+      isian = isian.replace('Rp. ','');
+      isian = isian.substring(0, isian.length-3);
+      isian = isian.replace('.','');
+    }
   	var $input = $('<input>', {
   		value: isian,
       id: 'input'+kolom,
@@ -691,7 +695,7 @@ include 'header.php'
         clearSelection();
   		   if (ok == 1)
   		   { if(kolom == 'harga'){
-    			$this.text('Rp. '+this.value);
+    			$this.text(toRp(this.value));
          }else{
     			$this.text(this.value);
          }
@@ -756,7 +760,7 @@ include 'header.php'
       });
     });
 
-    //validasi
+    //validasi satuan
     $(document).ready(function() {
       $(document).on('input', 'input#inputsatuan', function(){
         pesan = "Minimal 3 karakter, maksimal 15 karakter. \nKarakter spesial diperbolehkan";
@@ -767,6 +771,19 @@ include 'header.php'
            else{$(this).removeClass("valid").addClass("invalid"); flag=0;}
       });
     });
+
+  //to rupiah
+  function toRp(angka){
+    var rev     = parseInt(angka, 10).toString().split('').reverse().join('');
+    var rev2    = '';
+    for(var i = 0; i < rev.length; i++){
+        rev2  += rev[i];
+        if((i + 1) % 3 === 0 && i !== (rev.length - 1)){
+            rev2 += '.';
+        }
+    }
+    return 'Rp. ' + rev2.split('').reverse().join('') + ',00';
+  }
 
   //hapus barang dan produk
 	 $(document).ready(function(){

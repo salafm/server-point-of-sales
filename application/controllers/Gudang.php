@@ -20,8 +20,8 @@ class Gudang extends CI_Controller
   function index()
   {
 		$data['barang'] = $this->mdata->tampil_all('barang')->result();
-    $data['barangmasuk'] = $this->mdata->tampil_all('barangmasuk')->result();
-    $data['barangkeluar'] = $this->mdata->tampil_all('barangkeluar')->result();
+    $data['barangmasuk'] = $this->mdata->tampil_allorder('barangmasuk')->result();
+    $data['barangkeluar'] = $this->mdata->tampil_allorder('barangkeluar')->result();
     $data['produk'] = $this->mdata->tampil_all('produk')->result();
     $data['judul'] = 'Waroenkpos | Database Barang Gudang';
     $this->load->view('vgudang',$data);
@@ -111,7 +111,7 @@ class Gudang extends CI_Controller
     $kategori = $this->input->post('kategori',true);
     $nama = $this->input->post('nama',true);
     $jml = $this->input->post('jml',true);
-    
+
     $n = sizeof($idbarang);
     $total = 0;
     for ($i = 0; $i < $n; $i++){
@@ -171,13 +171,13 @@ class Gudang extends CI_Controller
     $total = 0;
     foreach ($hasil as $h) {
       $output .= '<tr><td>'.$h->nama.'</td>';
-      $output .= '<td> Rp.'.$h->harga.'</td>';
+      $output .= '<td> Rp.'.number_format($h->harga,2,",",".").'</td>';
       $output .= '<td>'.$h->jumlah.'</td>';
       $output .= '<td>'.$h->satuan.'</td>';
-      $output .= '<td> Rp.'.$h->harga*$h->jumlah.'</td></tr>';
+      $output .= '<td> Rp.'.number_format($h->harga*$h->jumlah,2,",",".").'</td></tr>';
       $total = $total + $h->harga*$h->jumlah;
     }
-    $output .= '<tr><td colspan="4" style="text-align:center"> Total Pembelian</td><td>Rp.'.$total .'</td></tr>';
+    $output .= '<tr><td colspan="4" style="text-align:center"> Total Pembelian</td><td>Rp.'.number_format($total,2,",",".").'</td></tr>';
     echo $output;
   }
 
@@ -194,7 +194,7 @@ class Gudang extends CI_Controller
         if ($c==0){
           $output .= '<tr id="'.$h->idproduk.'"><td rowspan="'.$n.'">'.$h->nama.'</td>';
           $output .= '<td rowspan="'.$n.'">'.$h->jumlah.'</td>';
-          $output .= '<td rowspan="'.$n.'"> Rp.'.$h->harga.'</td>';
+          $output .= '<td rowspan="'.$n.'"> Rp.'.number_format($h->harga,2,",",".").'</td>';
           $output .= '<td>'.$b->nama.'</td>';
           $output .= '<td>'.$h->jumlah*$b->jumlah.'</td>';
           $output .= '<td>'.$b->satuan.'</td></tr>';
@@ -218,13 +218,13 @@ class Gudang extends CI_Controller
     $total = 0;
     foreach ($hasil as $h) {
       $output .= '<tr><td>'.$h->nama.'</td>';
-      $output .= '<td> Rp.'.$h->harga.'</td>';
+      $output .= '<td> Rp.'.number_format($h->harga,2,",",".").'</td>';
       $output .= '<td>'.$h->jumlah.'</td>';
       $output .= '<td>'.$h->satuan.'</td>';
-      $output .= '<td> Rp.'.$h->harga*$h->jumlah.'</td></tr>';
+      $output .= '<td> Rp.'.number_format($h->harga*$h->jumlah,2,",",".").'</td></tr>';
       $total = $total + $h->harga*$h->jumlah;
     }
-    $output .= '<tr><td colspan="4" style="text-align:center"> Harga Produk</td><td>Rp.'.$total .'</td></tr>';
+    $output .= '<tr><td colspan="4" style="text-align:center"> Harga Produk</td><td>Rp.'.number_format($total,2,",",".") .'</td></tr>';
     echo $output;
   }
 
@@ -272,9 +272,6 @@ class Gudang extends CI_Controller
 				);
 
         $this->mdata->editsimpan($where,$fields,$table);
-        if($table== 'barang' && $kolom == 'harga'){
-          $this->updateharga($id);
-        }
 				if ($this->db->trans_status() === FALSE)
 				{
 								$this->db->trans_rollback();
@@ -282,6 +279,9 @@ class Gudang extends CI_Controller
 				else
 				{
 								$this->db->trans_commit();
+                if($table == 'barang' && $kolom == 'harga'){
+                  $this->updateharga($id);
+                }
 				}
         echo "Data berhasil disimpan";
   }

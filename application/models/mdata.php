@@ -31,6 +31,12 @@ class mdata extends CI_Model{
 		return $this->db->get($table);
 	}
 
+  function tampil_allorder($table){
+    $this->db->from($table);
+    $this->db->order_by("id", "desc");
+    return $this->db->get();
+  }
+
 	function tampil_where($table, $where){
 		return $this->db->get_where($table, $where);
 	}

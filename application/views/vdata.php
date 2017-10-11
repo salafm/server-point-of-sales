@@ -324,7 +324,7 @@ include 'header.php'
 		});
 	}
 
-  var tabel;
+  var dtable;
   function lihatproduk(id){
     if(id!=0){
       document.getElementById('tombol2').setAttribute('class','btn btn-default btn-sm');
@@ -338,7 +338,7 @@ include 'header.php'
         $('#myTable1').DataTable().destroy();
         $('#myTable1 tbody').html(data);
         $(document).ready(function() {
-          tabel =  $('#myTable1').DataTable({
+          dtable =  $('#myTable1').DataTable({
             responsive:false
           });
         });
@@ -568,7 +568,7 @@ include 'header.php'
         var e = $(this).closest('div.tab-pane').find('select.pil');
         var idcabang = e.children('option').filter(':selected').val();
         var tr = $(this).closest('tr');
-        var row = tabel.row(tr);
+        var row = dtable.row(tr);
         var id = tr.prop('id');
         $.ajax({
           url:'<?php echo site_url('data/detailproduk/');?>',

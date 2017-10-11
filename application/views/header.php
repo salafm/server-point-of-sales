@@ -104,7 +104,7 @@
                   </li>
                   <li><a href="<?php echo site_url('gudang')?>" ><i class="fa fa-cubes"></i> Data Barang Gudang </a>
                   </li>
-                  <!--li><a href="<?php echo site_url('home/reset')?>" ><i class="fa fa-trash"></i> Reset Data Cabang </a></li-->
+                  <li><a href="<?php echo site_url('home/reset')?>" ><i class="fa fa-trash"></i> Reset Data Cabang </a></li>
                 </ul>
               </div>
 
@@ -156,31 +156,11 @@
                 </li>
 
                 <li role="presentation" class="dropdown">
-                  <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
+                  <a href="" id="notifikasi" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
                     <i class="fa fa-envelope-o"></i>
-                    <span class="badge bg-green">1</span>
+                    <span id="notif" class=""></span>
                   </a>
                   <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
-                    <li>
-                      <a>
-                        <span class="image"><img src="<?php echo base_url('build/images/user.png'); ?>" alt="Profile Image" /></span>
-                        <span>
-                          <span><?php echo $this->session->userdata('nama');?></span>
-                          <span class="time">3 mins ago</span>
-                        </span>
-                        <span class="message">
-                          Film festivals used to be do-or-die moments for movie makers. They were where...
-                        </span>
-                      </a>
-                    </li>
-                    <li>
-                      <div class="text-center">
-                        <a>
-                          <strong>See All Alerts</strong>
-                          <i class="fa fa-angle-right"></i>
-                        </a>
-                      </div>
-                    </li>
                   </ul>
                 </li>
               </ul>
@@ -241,6 +221,24 @@
 
 		isFullscreen ? document.cancelFullScreen() : element.requestFullScreen();
 	}
+
+  $(function(){
+    $.ajax({
+      url:'<?php echo site_url('home/notifikasi') ?>',
+      type:'get',
+      dataType:'json',
+      success:function(data){
+        $('#menu1').html(data.isi);
+        $('#notif').html(data.notif);
+        $('#notif').attr('class',data.bubble);
+      }
+    });
+
+    $('#notifikasi').click(function(){
+      $('#notif').html('');
+      $('#notif').attr('class','');
+    });
+  });
 	</script>
 </body>
 </html>
