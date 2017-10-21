@@ -80,8 +80,6 @@ include 'header.php'
                   </li>
                   <li role="presentation" class=""><a href="#tab_content3" role="tab" id="profile-tab2" data-toggle="tab" aria-expanded="false">Barang Keluar</a>
                   </li>
-                  <li role="presentation" class=""><a href="#tab_content4" role="tab" id="profile-tab3" data-toggle="tab" aria-expanded="false">Produk</a>
-                  </li>
                 </ul>
                 <div id="myTabContent" class="tab-content">
                   <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
@@ -206,51 +204,6 @@ include 'header.php'
                         </table>
                     </div>
                   </div>
-
-                  <div role="tabpanel" class="tab-pane fade" id="tab_content4" aria-labelledby="profile3-tab">
-                    <div class="x_title">
-                    <h2>Data Produk <small>Barang jadi</small></h2>
-                    <a class="btn btn-default btn-sm pull-right" onclick="tambahproduk()" id="tombol3"><span class="fa fa-plus"></span> Tambah Produk</a>
-                      <div class="clearfix"></div>
-                      </div>
-                      <div class="x_content">
-                        <table id="myTable3" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
-                          <thead>
-                            <tr>
-                              <th>No. </th>
-                              <th>ID Produk</th>
-                              <th>Nama</th>
-                              <th>Harga</th>
-                              <th>Waktu Ditambahkan</th>
-                              <th>Info Detail</th>
-                              <th>Hapus</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <?php
-                						$no = 1;
-                						foreach($produk as $p){
-                					  ?>
-                                <tr id="<?php echo $p->idproduk?>">
-                                <td><?php echo $no++?></td>
-                                <td title="Kolom ini tidak bisa diedit"
-                                class="id" id="idproduk" name="produk"><?php echo $p->idproduk?></td>
-                                <td title="Double click untuk edit and tekan Enter untuk menyimpan"
-                                class="edit" id="nama"><?php echo $p->nama?></td>
-                                <td title="Kolom ini tidak bisa diedit"
-                                class="" id="">Rp. <?php echo number_format($p->harga,2,",",".")?></td>
-                                <td title="Kolom ini tidak bisa diedit"
-                                class="" id=""><?php echo strftime("%A, %d/%m/%Y : %T", strtotime($p->tanggal));?></td>
-                                <td><button class="btn btn-default btn-sm details" id="">
-                                <i class="fa fa-info-circle"></i>  &nbsp;details</button></td>
-                                <td name="produk"><button class="btn btn-danger btn-xs delete" id="<?php echo $p->id;?>">
-                                <i class="fa fa-remove"></i></button></td>
-                                </tr>
-                					  <?php }?>
-                          </tbody>
-                        </table>
-                    </div>
-                  </div>
                 </div>
               </div>
 
@@ -341,26 +294,15 @@ include 'header.php'
       <input type="hidden" value="" name="barang"/>
       <div class="form-body">
         <div class="form-group">
-          <label class="control-label col-md-3">Id Produk</label>
+          <label class="control-label col-md-3">Id Paket</label>
           <div class="col-md-9">
             <input name="idproduk" id="idproduk" placeholder="Id produk harus beda satu sama lain" class="form-control" type="text" title="Minimal 5 karakter. Hanya huruf dan angka" pattern="^[A-Za-z0-9]{5,10}$" minlength="5" maxlength="10" autocomplete="off" required>
           </div>
         </div>
         <div class="form-group">
-          <label class="control-label col-md-3">Nama Produk</label>
+          <label class="control-label col-md-3">Nama Paket</label>
           <div class="col-md-9">
             <input name="nama" id="nama" placeholder="Masukkan nama produk" class="form-control" type="text" autocomplete="off" title="Minimal 5 karakter, maksimal 30 karakter. Karakter spesial diperbolehkan" pattern="^.{5,30}$" type="text" minlength="5" maxlength="30" required>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="control-label col-md-3">Kategori</label>
-          <div class="col-md-9">
-            <select class="form-control" name="kategori" required>
-              <option value="">--Pilih Kategori--</option>
-              <option value="makanan">Makanan</option>
-              <option value="minuman">Minuman</option>
-              <option value="lain">Lain-lain</option>
-            </select>
           </div>
         </div>
         <div class="modal-header">
@@ -498,7 +440,7 @@ include 'header.php'
           }
           else {
               // Open this row
-              row.child(format2(id)).show();
+              row.child(format(id)).show();
               tr.addClass('shown');
           }
         });

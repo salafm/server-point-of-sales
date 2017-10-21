@@ -108,17 +108,16 @@ class Gudang extends CI_Controller
     $this->db->trans_begin();
     $idproduk = $this->input->post('idproduk',true);
     $idbarang = $this->input->post('pil',true);
-    $kategori = $this->input->post('kategori',true);
     $nama = $this->input->post('nama',true);
     $jml = $this->input->post('jml',true);
 
     $n = sizeof($idbarang);
     $total = 0;
     for ($i = 0; $i < $n; $i++){
-      $hasil = $this->mdata->harga($idbarang[$i])->result();
+      $hasil = $this->mdata->harga(array('idbarang' => $idbarang[$i]), 'barang')->result();
       $total = $total + ($hasil[0]->harga * $jml[$i]);
     }
-    $input2 = array('idproduk' => $idproduk, 'nama' => $nama, 'kategori' => $kategori, 'harga' => $total);
+    $input2 = array('idproduk' => $idproduk, 'nama' => $nama, 'harga' => $total);
     $this->mdata->simpan('produk',$input2);
     for ($i = 0; $i < $n; $i++){
       $input = array(
@@ -183,31 +182,18 @@ class Gudang extends CI_Controller
 
   function detailbarangkeluar($id)
   {
-    $hasil = $this->mdata->tampil_join2('barangkeluar_details',$id)->result();
+    $hasil = $this->mdata->tampil_join1('barangkeluar_details',$id)->result();
     $output ='';
     $total = 0;
     foreach ($hasil as $h) {
-      $barang = $this->mdata->tampil_join3('produk_details',$h->idproduk)->result();
-      $n = sizeof($barang);
-      $c = 0;
-      foreach ($barang as $b) {
-        if ($c==0){
-          $output .= '<tr id="'.$h->idproduk.'"><td rowspan="'.$n.'">'.$h->nama.'</td>';
-          $output .= '<td rowspan="'.$n.'">'.$h->jumlah.'</td>';
-          $output .= '<td rowspan="'.$n.'"> Rp.'.number_format($h->harga,2,",",".").'</td>';
-          $output .= '<td>'.$b->nama.'</td>';
-          $output .= '<td>'.$h->jumlah*$b->jumlah.'</td>';
-          $output .= '<td>'.$b->satuan.'</td></tr>';
-        }
-        else {
-          $output .= '<tr>';
-          $output .= '<td>'.$b->nama.'</td>';
-          $output .= '<td>'.$h->jumlah*$b->jumlah.'</td>';
-          $output .= '<td>'.$b->satuan.'</td></tr>';
-        }
-        $c++;
-      }
+      $output .= '<tr><td>'.$h->nama.'</td>';
+      $output .= '<td> Rp.'.number_format($h->harga,2,",",".").'</td>';
+      $output .= '<td>'.$h->jumlah.'</td>';
+      $output .= '<td>'.$h->satuan.'</td>';
+      $output .= '<td> Rp.'.number_format($h->harga*$h->jumlah,2,",",".").'</td></tr>';
+      $total = $total + $h->harga*$h->jumlah;
     }
+    $output .= '<tr><td colspan="4" style="text-align:center"> Total Pembelian</td><td>Rp.'.number_format($total,2,",",".").'</td></tr>';
     echo $output;
   }
 

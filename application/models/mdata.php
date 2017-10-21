@@ -88,8 +88,11 @@ class mdata extends CI_Model{
     return $this->db->query('SELECT * FROM '.$table.' INNER JOIN barangclient ON '.$table.'.idbarang = barangclient.idbarang WHERE idproduk = "'.$where1.'" AND '.$table.'.idcabang = '.$where2.' AND barangclient.idcabang = '.$where2.'');
   }
 
-  function harga($where){
-    return $this->db->query('SELECT harga FROM barang WHERE idbarang = "'.$where.'" ');
+  function harga($where,$table){
+    $this->db->select('harga');
+    $this->db->where($where);
+    $this->db->from($table);
+    return $this->db->get();
   }
 
   function namacabang($where){

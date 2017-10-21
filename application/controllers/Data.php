@@ -13,7 +13,7 @@ class Data extends CI_Controller{
 
 	function index(){
 		$data['judul'] = 'Waroenkpos | Database Barang Cabang';
-		$data['produk'] = $this->mdata->tampil_all('produk')->result();
+		$data['barang'] = $this->mdata->tampil_all('barang')->result();
 		$data['cabang'] = $this->mdata->tampil_all('cabang')->result();
 		$this->load->view('vdata',$data);
 	}
@@ -70,81 +70,37 @@ class Data extends CI_Controller{
 			$ids = '0001';
 		}
 		$idtrans = 'out'.$id.$ids;
-		$idproduk = $this->input->post('pil',true);
-		$nama = $this->input->post('nama',true);
-		$kategori = $this->input->post('kategori',true);
+		$idbarang = $this->input->post('pil',true);
 		$harga = $this->input->post('harga',true);
+		$satuan = $this->input->post('satuan',true);
 		$desk = $this->input->post('desk',true);
 		$jml = $this->input->post('jml',true);
-		$n = sizeof($idproduk);
+		$n = sizeof($idbarang);
     for ($i = 0; $i < $n; $i++){
 			//input barangkeluar_details
       $input = array(
 				'idtransaksi' => $idtrans,
-        'idproduk' => $idproduk[$i],
+				'idbarang' => $idbarang[$i],
         'jumlah' => $jml[$i],
-				'harga' => $harga[$i]
+				'harga' => $harga[$i],
+				'satuan' => $satuan[$i]
       );
-			//cek apakah sudah ada produk di produkclient
-			$where = array (
-				'idproduk' => $idproduk[$i],
-				'idcabang' => $id
-			);
-			//cek???
-			$where2 = array (
-				'idproduk' => $idproduk[$i]
-			);
+      $this->mdata->simpan('barangkeluar_details',$input); //simpan barangkeluar_details
 
-      $this->mdata->simpan('barangkeluar_details',$input);											//simpan barangkeluar_details
-			//cek apakah sudah ada produk ini di tabel produkclient
-			$cek = $this->mdata->tampil_where('produkclient',$where)->num_rows();
-			if($cek == 0){
-				//input produkclient
-				$inputprodukclient = array(
+			//cek apakah sudah ada barang di barangclient
+			$where3 = array('idbarang' => $idbarang[$i], 'idcabang' => $id);
+			$barang = $this->mdata->tampil_where('barang',array('idbarang' => $idbarang[$i]))->result();
+			$cekbarang = $this->mdata->tampil_where('barangclient',$where3)->num_rows();
+			if($cekbarang == 0){
+				foreach ($barang as $b) {
+					$inputbarang = array(
 						'idcabang' => $id,
-		        'idproduk' => $idproduk[$i],
-						'nama' => $nama[$i],
-						'harga' => $harga[$i],
-						'kategori' => $kategori[$i]
-				);
-				$this->mdata->simpan('produkclient',$inputprodukclient);								//simpan produkclient
-			}
-
-			//ambil idbarang dari produk_details
-			$idbarang = $this->mdata->tampil_where('produk_details',$where2)->result();
-			foreach ($idbarang as $idb) {
-				//cek apakah sudah ada barang di barangclient
-				$where3 = array('idbarang' => $idb->idbarang, 'idcabang' => $id);
-				$cekbarang = $this->mdata->tampil_where('barangclient',$where3)->num_rows();
-				if($cekbarang == 0){
-					//ambilharga dari table barang
-					$where4 = array('idbarang' => $idb->idbarang );
-					$barang = $this->mdata->tampil_where('barang',$where4)->result();
-					foreach ($barang as $b) {
-						$inputbarang = array(
-							'idcabang' => $id,
-							'idbarang' => $b->idbarang,
-							'nama' => $b->nama,
-							'harga' => $b->harga,
-							'satuan' => $b->satuan
-						);
-						$this->mdata->simpan('barangclient',$inputbarang);
-					}
-				}
-			}
-
-			$where5 = array('idcabang' => $id, 'idproduk' => $idproduk[$i]);
-			$cekproduk = $this->mdata->tampil_where('produkclient_details',$where5)->num_rows();
-			if($cekproduk == 0){
-				$produkdetails = $this->mdata->tampil_where('produk_details',$where2)->result();
-				foreach ($produkdetails as $p) {
-					$inputprodukdetails = array(
-						'idcabang' => $id,
-						'idproduk' => $idproduk[$i],
-						'idbarang' => $p->idbarang,
-						'jumlah' => $p->jumlah
+						'idbarang' => $b->idbarang,
+						'nama' => $b->nama,
+						'harga' => $b->harga,
+						'satuan' => $b->satuan
 					);
-					$this->mdata->simpan('produkclient_details',$inputprodukdetails);
+					$this->mdata->simpan('barangclient',$inputbarang);
 				}
 			}
     }
@@ -183,16 +139,6 @@ class Data extends CI_Controller{
 		}
 		echo json_encode(array("status" => TRUE));
 	}
-
-	function hargaproduk($id)
-  {
-    $where = array('idproduk' => $id);
-    $data = $this->mdata->tampil_where('produk', $where)->result();
-    $output1 =  '<input name="harga[]" id="" value="'.$data[0]->harga.'" class="form-control harga" placeholder="Harga produk" type="text" readOnly>';
-		$output2 = $data[0]->kategori;
-		$output = array('output1' => $output1, 'output2' => $output2);
-		echo json_encode($output);
-  }
 
 	function detailproduk()
   {
@@ -248,22 +194,40 @@ class Data extends CI_Controller{
 		$idproduk = $this->input->get('idproduk',true);
 		$idcabang = $this->input->get('idcabang',true);
 		$hasil = $this->mdata->tampil_join4('produkclient_details',$idproduk,$idcabang)->result();
+		$barang = $this->mdata->tampil_where('barangclient',array('idcabang' => $idcabang))->result();
+		$row = $this->mdata->tampil_join4('produkclient_details',$idproduk,$idcabang)->num_rows();
 		$output = '';
+		$x = 1;
 		foreach ($hasil as $h) {
+			$output .= '<div class="input3" id="komposisi'.$x.'">';
 			$output .= '<div class="form-group"><label class="control-label col-md-3" style="padding-left:0px">Nama bahan</label>
-										<div class="col-md-8">
-											<input name="idbarang[]" id="" value="'.$h->idbarang.'" class="form-control" type="hidden">
-											<input name="jml" id="" title="" placeholder="" value="'.$h->nama.'" class="form-control" type="text" disabled>
-									</div></div>';
+										<div class="col-md-7">
+											<select name="pil[]" class="form-control pil2" onchange="" id="pilihan" required>';
+											foreach ($barang as $b) {
+												if($h->idbarang == $b->idbarang){
+													$output .= '<option value="'.$b->idbarang.'" selected>'.$b->nama.'</option>';
+												}else{
+													$output .= '<option value="'.$b->idbarang.'">'.$b->nama.'</option>';
+												}
+											}
+			$output .= '</select></div></div>';
 			$output .= '<div class="form-group"><label class="control-label col-md-3" style="padding-left:0px">Jumlah</label>
 										<div class="col-md-3">
 											<input name="jml[]" id="" value="'.$h->jumlah.'" placeholder="" class="form-control" type="text" title="Hanya angka diperbolehkan" pattern="^[1-9][0-9]{0,11}$" maxlength="11" autocomplete="off" required>
 											<input name="harga[]" id="" value="'.$h->harga.'" class="form-control" type="hidden">
 										</div>
-										<label class="control-label col-md-2" style="padding-left:3px">Satuan</label>
-										<div class="col-md-3">
+										<label class="control-label col-md-1" style="padding-left:3px">Satuan</label>
+										<div class="col-md-3 colsatuan">
 											<input name="" value="'.$h->satuan.'" id="" class="form-control" type="text" disabled>
-									</div></div>';
+									</div>';
+									if($x == $row){
+										$output .= '<div class="col-md-1"><a class="btn btn-primary btn-sm plusss" id="plus'.$x.'"><i class="fa fa-plus"></i></a></div>
+										<div class="col-md-1"><a class="btn btn-danger btn-sm minusss" id="minus'.$x.'"><i class="fa fa-minus"></i></a></div></div></div>';
+									}else{
+										$output .= '<div class="col-md-1"><a class="btn btn-primary btn-sm plusss hidden" id="plus'.$x.'"><i class="fa fa-plus"></i></a></div>
+										<div class="col-md-1"><a class="btn btn-danger btn-sm minusss hidden" id="minus'.$x.'"><i class="fa fa-minus"></i></a></div></div></div>';
+									}
+			$x++;
 		}
 
 		echo $output;
@@ -274,16 +238,17 @@ class Data extends CI_Controller{
 		$this->db->trans_begin();
 		$idproduk = $this->input->post('idproduk',true);
 		$idcabang = $this->input->post('idcabang',true);
-		$idbarang = $this->input->post('idbarang',true);
+		$idbarang = $this->input->post('pil',true);
 		$harga = $this->input->post('harga',true);
 		$jml = $this->input->post('jml',true);
 		$total = 0;
 		$n = sizeof($idbarang);
+		$where = array('idcabang' => $idcabang, 'idproduk' => $idproduk);
+		$this->mdata->hapus($where,'produkclient_details');
 		for ($i = 0; $i < $n; $i++){
 			$total = $total + ($harga[$i]*$jml[$i]);
-			$where = array('idcabang' => $idcabang, 'idproduk' => $idproduk, 'idbarang' => $idbarang[$i]);
-			$update = array('jumlah' => $jml[$i]);
-			$this->mdata->update($where,$update,'produkclient_details');
+			$where2 = array('idcabang' => $idcabang, 'idproduk' => $idproduk, 'idbarang' => $idbarang[$i], 'jumlah' => $jml[$i]);
+			$this->mdata->simpan('produkclient_details',$where2);
 		}
 
 		$where2 = array('idcabang' => $idcabang, 'idproduk' => $idproduk);
@@ -358,4 +323,69 @@ class Data extends CI_Controller{
       }
     }
   }
+
+	function simpanproduk(){
+    $this->db->trans_begin();
+		$idcabang = $this->input->post('idcabang',true);
+    $idproduk = $this->input->post('idproduk',true);
+    $idbarang = $this->input->post('pil',true);
+    $nama = $this->input->post('nama',true);
+    $jml = $this->input->post('jml',true);
+
+    $n = sizeof($idbarang);
+    $total = 0;
+    for ($i = 0; $i < $n; $i++){
+      $hasil = $this->mdata->harga(array('idbarang' => $idbarang[$i], 'idcabang' => $idcabang), 'barangclient')->result();
+      $total = $total + ($hasil[0]->harga * $jml[$i]);
+    }
+    $input2 = array('idcabang' => $idcabang ,'idproduk' => $idproduk, 'nama' => $nama, 'harga' => $total);
+    $this->mdata->simpan('produkclient',$input2);
+
+    for ($i = 0; $i < $n; $i++){
+      $input = array(
+				'idcabang' => $idcabang,
+        'idbarang' => $idbarang[$i],
+        'idproduk' => $idproduk,
+        'jumlah' => $jml[$i]
+      );
+      $this->mdata->simpan('produkclient_details',$input);
+    }
+
+    if ($this->db->trans_status() === FALSE)
+    {
+            $this->db->trans_rollback();
+    }
+    else
+    {
+            $this->db->trans_commit();
+    }
+    echo json_encode(array("status" => TRUE));
+  }
+
+	function pilihbarang($id){
+		$barang = $this->mdata->tampil_where('barangclient',array('idcabang' => $id))->result();
+		$output = '<option value="" selected>--Pilih--</option>';
+		foreach ($barang as $b) {
+			$output .= '<option value="'.$b->idbarang.'">'.$b->nama.'</option>';
+		}
+
+		echo $output;
+	}
+
+	function satuanbarangclient()
+	{
+		$id = $this->input->get('idbarang',true);
+		$idcabang = $this->input->get('idcabang',true);
+		$where = array('idbarang' => $id, 'idcabang' => $idcabang);
+		$data = $this->mdata->tampil_where('barangclient', $where)->result();
+		echo '<input name="" value="'.$data[0]->satuan.'" id="" class="form-control" type="text" disabled><input name="harga[]" id="" value="'.$data[0]->harga.'" class="form-control" type="hidden">';
+	}
+
+	function satuanbarang()
+	{
+		$id = $this->input->get('idbarang',true);
+		$where = array('idbarang' => $id);
+		$data = $this->mdata->tampil_where('barang', $where)->result();
+		echo '<input name="satuan[]" value="'.$data[0]->satuan.'" id="" class="form-control" type="text" readOnly><input name="harga[]" id="" value="'.$data[0]->harga.'" class="form-control" type="hidden">';
+	}
 }
