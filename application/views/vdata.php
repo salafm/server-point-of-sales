@@ -11,6 +11,19 @@ include 'header.php'
       margin-left: auto;
       margin-right: auto;
     }
+    .glyphicon-remove {
+      color: red;
+      font-size: 20px;
+    }
+
+    .glyphicon-ok{
+      color:green;
+      font-size: 20px;
+    }
+    .alert{
+      color:red;
+      text-decoration: underline;
+    }
     </style>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <!-- Meta, title, CSS, favicons, etc. -->
@@ -83,7 +96,7 @@ include 'header.php'
             						<option value="<?php echo $c->id?>"><?php echo $c->nama?></option>
             						<?php }?>
             					</select></div>
-            					<a class="btn btn-default btn-sm disabled" id="tombol"><span class="fa fa-plus"></span> Tambah Barang</a>
+            					<a class="btn btn-default btn-sm disabled" id="tombol"><span class="fa fa-plus"></span> Kirim Barang</a>
                         <div class="clearfix"></div>
                       </div>
                       <div class="x_content">
@@ -162,44 +175,9 @@ include 'header.php'
         <div class="modal-body form">
           <input type="hidden" value="" name="idcabang" id="idcabang1"/>
           <div class="form-body" id="form-body">
-            <div class="form-group">
-              <label class="control-label col-md-3">Deskripsi</label>
-              <div class="col-md-9">
-                <input name="desk" id="" placeholder="Keterangan transaksi" class="form-control" type="text" maxlength="50" autocomplete="off">
-              </div>
-            </div>
-            <div class="input" id="1000">
-              <div class="form-group">
-                <label class="control-label col-md-3">Nama Produk</label>
-                <div class="col-md-7">
-                  <select name="pil[]" class="form-control pilbarang" onchange="" required>
-                    <option value="" selected>--Pilih--</option>
-                    <?php foreach($barang as $b){?>
-                    <option value="<?php echo $b->idbarang?>"><?php echo $b->nama?></option>
-                    <?php }?>
-                  </select>
-                </div>
-                </div>
-                <div class="form-group">
-                  <label class="control-label col-md-3">Jumlah</label>
-                  <div class="col-md-3">
-                    <input name="jml[]" id="jml" placeholder="Jumlah produk" class="form-control" type="text"  title="Hanya angka diperbolehkan" pattern="^[1-9][0-9]{0,11}$" maxlength="11" autocomplete="off" required>
-                  </div>
-                  <label class="control-label col-md-1" style="padding-left:3px">Satuan</label>
-                  <div class="col-md-3 colsatuan">
-                    <input name="harga[]" id="harga" placeholder="Harga produk" class="form-control hidden" type="text" disabled>
-                    <input name="satuan[]" id="satuan1" placeholder="Satuan Barang" class="form-control" type="text" disabled>
-                  </div>
-                  <div class="col-md-1">
-                    <a class="btn btn-primary btn-sm plus" id="2000" onclick=""><i class="fa fa-plus"></i></a>
-                  </div>
-                </div>
-            </div>
           </div>
           </div>
-          <div class="modal-footer">
-            <input type="submit" id="btnSave" class="btn btn-default" value="Simpan">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
+          <div class="modal-footer" id="bawah">
           </div>
         </form>
         </div><!-- /.modal-content -->
@@ -312,7 +290,7 @@ include 'header.php'
         </div>
         </div>
         <div class="modal-footer">
-          <input type="submit" id="btnSave3" class="btn btn-default" value="Simpan"/>
+          <input type="submit" id="btnSave4" class="btn btn-default" value="Simpan"/>
           <button type="button" class="btn btn-default batal1" data-dismiss="modal">Batal</button>
         </div>
       </form>
@@ -342,7 +320,8 @@ include 'header.php'
     responsive:false
   });
 
-  //tampil produk
+  //----------------------------------------------------------all barang------------------------------------------------------
+  //tampil barang
 	function lihatbarang(id){
 		if(id!=0){
 			document.getElementById('tombol').setAttribute('class','btn btn-default btn-sm');
@@ -364,31 +343,9 @@ include 'header.php'
 		});
 	}
 
-  var dtable;
-  function lihatproduk(id){
-    if(id!=0){
-      document.getElementById('tombol2').setAttribute('class','btn btn-default btn-sm');
-    }
-    else{
-      document.getElementById('tombol2').setAttribute('class','btn btn-default btn-sm disabled');
-    }
-    $.get({
-      url : '<?php echo site_url('data/tampilproduk/');?>'+id,
-      success : function(data){
-        $('#myTable1').DataTable().destroy();
-        $('#myTable1 tbody').html(data);
-        $(document).ready(function() {
-          dtable =  $('#myTable1').DataTable({
-            responsive:false
-          });
-        });
-      }
-    });
-  }
-
-  //show modal tambah produk
+  //show modal tambah barang
 	 $(function(){
-     $('#tombol').click( function(){
+     $(document).on('click','#tombol', function(){
        var e = $(this).closest('div.tab-pane').find('select.pil');
        var value = e.children('option').filter(':selected').val();
        var teks = e.children('option').filter(':selected').text();
@@ -396,31 +353,98 @@ include 'header.php'
        $('#form')[0].reset();
        $('input.harga').removeAttr('value');
        $('input.harga').attr('disabled','disabled');
+       $('#bawah').html('<input type="button" id="btn" class="btn btn-default" value="Cek Ketersediaan"><button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>');
+       var isi ='<div class="form-group"><label class="control-label col-md-3">Deskripsi</label><div class="col-md-9">'
+       +'<input name="desk" id="" placeholder="Keterangan transaksi" class="form-control" type="text" maxlength="50" autocomplete="off"></div></div>'
+       +'<div class="input" id="barang1"><div class="form-group"></label><label class="control-label col-md-3">Nama Barang</label><div class="col-md-7">'
+       +'<select name="pil[]" class="form-control pilbarang" onchange="" required><option value="" selected>--Pilih--</option><?php foreach($barang as $b){?>'
+       +'<option value="<?php echo $b->idbarang?>"><?php echo $b->nama?></option><?php }?></select></div><label class="control-label col-md-1 ikon" id=""></label></div>'
+       +'<div class="form-group"><label class="control-label col-md-3">Jumlah</label><div class="col-md-3"><input name="jml[]" id="jml" placeholder="Jumlah produk" class="form-control" type="text" title="Hanya angka diperbolehkan" pattern="^[1-9][0-9]{0,11}$" maxlength="11" autocomplete="off" required></div>'
+       +'<label class="control-label col-md-1" style="padding-left:3px">Satuan</label><div class="col-md-3 colsatuan"><input name="harga[]" id="harga" placeholder="Harga produk" class="form-control hidden" type="text" disabled>'
+       +'<input name="satuan[]" id="satuan1" placeholder="Satuan Barang" class="form-control" type="text" disabled></div>'
+       +'<div class="col-md-1"><a class="btn btn-primary btn-sm plus" id="pluss1"><i class="fa fa-plus"></i></a></div>';
+       $("#form-body").html(isi);
        $('#modal_form').modal('show');
        $('.modal-title').text('Tambah Stok Barang di '+teks);
+    }).on('click', 'a.plus' ,function(){
+        var id = $(this).prop('id').replace('pluss','');
+        var idb = parseInt(id)+1;
+        var isi = '<div class="input" id="barang'+idb+'"><div class="form-group"></label><label class="control-label col-md-3">Nama Barang</label><div class="col-md-7">'
+        +'<select name="pil[]" class="form-control pilbarang" onchange="" required><option value="" selected>--Pilih--</option><?php foreach($barang as $b){?>'
+        +'<option value="<?php echo $b->idbarang?>"><?php echo $b->nama?></option><?php }?></select></div><label class="control-label col-md-1 ikon" id=""></label></div>'
+        +'<div class="form-group"><label class="control-label col-md-3">Jumlah</label><div class="col-md-3"><input name="jml[]" id="jml" placeholder="Jumlah produk" class="form-control" type="text" title="Hanya angka diperbolehkan" pattern="^[1-9][0-9]{0,11}$" maxlength="11" autocomplete="off" required></div>'
+        +'<label class="control-label col-md-1" style="padding-left:3px">Satuan</label><div class="col-md-3 colsatuan"><input name="harga[]" id="harga" placeholder="Harga produk" class="form-control hidden" type="text" disabled>'
+        +'<input name="satuan[]" id="satuan1" placeholder="Satuan Barang" class="form-control" type="text" disabled></div>'
+        +'<div class="col-md-1"><a class="btn btn-primary btn-sm plus" id="pluss'+idb+'"><i class="fa fa-plus"></i></a></div>'
+        +'<div class="col-md-1"><a class="btn btn-danger btn-sm minus" id="minuss'+idb+'"><i class="fa fa-minus"></i></a></div></div></div>';
+        $("#form-body").append(isi);
+         $('#pluss'+id).attr('class','btn btn-primary btn-sm plus hidden');
+         $('#minuss'+id).attr('class','btn btn-primary btn-sm minus hidden');
+    }).on('click','a.minus', function(){
+      var id = $(this).prop('id').replace('minuss','');
+      var idl = id-1;
+      $('#barang'+id).remove();
+      if(id == 1){
+        $('#pluss'+idl).attr('class','btn btn-primary btn-sm plus');
+      }else {
+        $('#pluss'+idl).attr('class','btn btn-primary btn-sm plus');
+        $('#minuss'+idl).attr('class','btn btn-danger btn-sm minus');
+      }
+    }).on('click','#btn', function(){
+      $.ajax({
+        url: '<?php echo site_url('data/cekbarang') ?>',
+        type:'get',
+        data: $('#form').serialize(),
+        dataType:'JSON',
+        success:function(data){
+          var flag =1;
+          for (var i = 0; i < data.length; i++) {
+            var id = i+1;
+            if(data[i] == 0){
+              flag = 0;
+              $('#barang'+id).find('label.ikon').html('<span class="glyphicon glyphicon-remove" ></span>');
+            }else {
+              $('#barang'+id).find('label.ikon').html('<span class="glyphicon glyphicon-ok" ></span>');
+            }
+          }
+
+          if(flag == 0){
+            var isi = '<label class="control-label pull-left alert">Stok barang tidak mencukupi</label>'
+                     +'<input type="button" id="btn" class="btn btn-default" value="Cek Ketersediaan"/>'
+                     +'<button type="button" class="btn btn-default batal1" data-dismiss="modal">Batal</button>';
+            $('#bawah').html(isi);
+          }else {
+            var isi = '<input type="submit" class="btn btn-default pull-left" value="Kirim Barang"/>'
+                     +'<input type="button" id="btn" class="btn btn-default" value="Cek Ketersediaan"/>'
+                     +'<button type="button" class="btn btn-default batal1" data-dismiss="modal">Batal</button>';
+           $('#bawah').html(isi);
+          }
+        }
+      })
     });
   });
 
- //simpan tambah produk
- $('#form').submit(function (e){
-   $.ajax({
-     url : '<?php echo site_url('data/simpanbarang/');?>',
-     type: "POST",
-     data: $('#form').serialize(),
-     dataType: "JSON",
-     success: function(response){
-       $('#modal_form').modal('hide');
-       alert(response.pesan);
-       location.reload();
-     },
-     error: function (jqXHR, textStatus, errorThrown){
-       alert('Gagal mengirim barang. Stok barang tidak mencukupi');
-     }
+   //simpan tambah barang
+   $('#form').submit(function (e){
+     $.ajax({
+       url : '<?php echo site_url('data/simpanbarang/');?>',
+       type: "POST",
+       data: $('#form').serialize(),
+       dataType: "JSON",
+       success: function(response){
+         $('#modal_form').modal('hide');
+         alert(response.pesan);
+         location.reload();
+       },
+       error: function (jqXHR, textStatus, errorThrown){
+         alert('Gagal mengirim barang. Stok barang tidak mencukupi.\nSilahkan tekan tombol cek ketersediaan terlebih dahulu.');
+       }
+     });
+     e.preventDefault();
    });
-   e.preventDefault();
- })
 
 
+  //-------------------------------------------------edit data doubleclick-----------------------------------------------------
   //edit dblclick
 	$(document).on('dblclick', '.edit' ,function() {
 	var ok = 0;
@@ -433,6 +457,11 @@ include 'header.php'
 	var teks = $(this).html();
 	var $this = $(this);
   var isian = $this.text();
+  if (kolom == 'harga') {
+    isian = isian.replace(' Rp. ','');
+    isian = isian.substring(0, isian.length-3);
+    isian = isian.replace('.','');
+  }
   isian = isian.replace(' Rp. ','');
 	var $input = $('<input>', {
 		value: isian,
@@ -442,7 +471,7 @@ include 'header.php'
       clearSelection();
 		   if (ok == 1)
 		   { if(kolom == 'harga'){
-         $this.text('Rp. '+this.value);
+         $this.text(toRp(this.value));
        }else{$this.text(this.value);}
 			}
 			else{
@@ -535,37 +564,18 @@ include 'header.php'
     });
 	});
 
-
-    //add input elemen tambah produk
-    $(document).on('click', 'a.plus' ,function(){
-        var id = $(this).attr('id');
-        var ids = parseInt(id);
-        var idbaru = ids+1;
-        var idminus = idbaru*2; var idminus2 = idminus-2;
-        var id2 = parseInt($(this).closest('div.input').prop('id'));
-        var idsbaru = id2+1;
-        $("#form-body").append('<div class="input" id="'+idsbaru+'"><div class="form-group"><label class="control-label col-md-3">Nama Barang</label><div class="col-md-7">'
-        +'<select name="pil[]" class="form-control pilbarang" onchange="" required><option value="" selected>--Pilih--</option><?php foreach($barang as $b){?>'
-        +'<option value="<?php echo $b->idbarang?>"><?php echo $b->nama?></option><?php }?></select></div></div>'
-        +'<div class="form-group"><label class="control-label col-md-3">Jumlah</label><div class="col-md-3"><input name="jml[]" id="jml" placeholder="Jumlah produk" class="form-control" type="text" title="Hanya angka diperbolehkan" pattern="^[1-9][0-9]{0,11}$" maxlength="11" autocomplete="off" required></div>'
-        +'<label class="control-label col-md-1" style="padding-left:3px">Harga</label><div class="col-md-3 colsatuan"><input name="harga[]" id="harga" placeholder="Harga produk" class="form-control hidden" type="text" disabled>'
-        +'<input name="satuan[]" id="satuan1" placeholder="Satuan Barang" class="form-control" type="text" disabled></div>'
-        +'<div class="col-md-1"><a class="btn btn-primary btn-sm plus" id="'+idbaru+'"><i class="fa fa-plus"></i></a></div>'
-        +'<div class="col-md-1"><a class="btn btn-danger btn-sm minus" id="'+idminus+'"><i class="fa fa-minus"></i></a></div></div></div>');
-         $('#'+id).attr('class','btn btn-primary btn-sm plus hidden');
-         $('#'+idminus2).attr('class','btn btn-primary btn-sm minus hidden');
-    });
-
-    //hapus elemen input tambah stok barang
-     $(document).on('click','a.minus', function(){
-       var id = $(this).attr('id');
-       var ids = parseInt(id); ids2 = ids-2;
-       var idbaru = ids/2; idbaru = idbaru-1;
-       var id2 = $(this).closest('div.input').prop('id');
-       $('#'+id2).remove();
-       $('#'+idbaru).attr('class','btn btn-primary btn-sm plus');
-       $('#'+ids2).attr('class','btn btn-danger btn-sm minus');
-     });
+  //to rupiah
+  function toRp(angka){
+    var rev     = parseInt(angka, 10).toString().split('').reverse().join('');
+    var rev2    = '';
+    for(var i = 0; i < rev.length; i++){
+        rev2  += rev[i];
+        if((i + 1) % 3 === 0 && i !== (rev.length - 1)){
+            rev2 += '.';
+        }
+    }
+    return 'Rp. ' + rev2.split('').reverse().join('') + ',00';
+  }
 
      //remove all select
     function clearSelection() {
@@ -577,46 +587,7 @@ include 'header.php'
       }
     }
 
-    //details produk
-    function format3 (id) {
-      return '<table id="myTable3" class="table dt-responsive table-bordered nowrap tabel" width="100%"><thead>'
-      +'<tr><th colspan="3" style="text-align:center;background:#ededed">Komposisi produk '+id+'</th>'
-      +'</tr><tr><th>Nama barang</th><th>Jumlah</th><th>Satuan</th></tr></thead>'
-      +'<tbody class="'+id+'"></tbody></table>';
-    }
-
-    //show details produk
-    $(document).ready(function(){
-      $(document).on('click', 'td button.details', function (){
-        var e = $(this).closest('div.tab-pane').find('select.pil');
-        var idcabang = e.children('option').filter(':selected').val();
-        var tr = $(this).closest('tr');
-        var row = dtable.row(tr);
-        var id = tr.prop('id');
-        $.ajax({
-          url:'<?php echo site_url('data/detailproduk/');?>',
-          type : 'get',
-          data:{
-            'idcabang' : idcabang,
-            'idproduk' : id
-          },
-          success: function(data){
-            $('.'+id).html(data);
-          }
-        });
-        if (row.child.isShown()) {
-            // This row is already open - close it
-            row.child.hide();
-            tr.removeClass('shown');
-        }
-        else {
-            // Open this row
-            row.child(format3(id)).show();
-            tr.addClass('shown');
-        }
-      });
-    });
-
+    //------------------------------------------konversi---------------------------------------------------------------------
     //show setting konversi
     $(function() {
       $(document).on('click','.setting', function(){
@@ -624,8 +595,11 @@ include 'header.php'
         var nama = $(this).closest('tr').find('td.nama').text();
         var satuan = $(this).closest('tr').find('td.satuan').text();
         var stok = $(this).closest('tr').find('td.stok').text();
+        stok = stok.replace(',','.');
         var harga = $(this).closest('tr').find('td.harga').text();
-        harga = parseInt(harga.replace('Rp. ',''));
+        harga = harga.replace(' Rp. ','');
+        harga = harga.substring(0, harga.length-3);
+        harga = harga.replace('.','');
         var e = $(this).closest('div.tab-pane').find('select.pil');
         var idcabang = e.children('option').filter(':selected').val();
         var namacabang = e.children('option').filter(':selected').text();
@@ -756,6 +730,28 @@ include 'header.php'
 
     //--------------------------------------------------------------all produk ------------------------------------------------------------------------
 
+    var dtable;
+    function lihatproduk(id){
+      if(id!=0){
+        document.getElementById('tombol2').setAttribute('class','btn btn-default btn-sm');
+      }
+      else{
+        document.getElementById('tombol2').setAttribute('class','btn btn-default btn-sm disabled');
+      }
+      $.get({
+        url : '<?php echo site_url('data/tampilproduk/');?>'+id,
+        success : function(data){
+          $('#myTable1').DataTable().destroy();
+          $('#myTable1 tbody').html(data);
+          $(document).ready(function() {
+            dtable =  $('#myTable1').DataTable({
+              responsive:false
+            });
+          });
+        }
+      });
+    }
+
     //show modal tambah produk
       $(function(){
         $('#tombol2').click( function(){
@@ -854,7 +850,47 @@ include 'header.php'
             $('#'+idb).find('div').find('div.colsatuan').html(data);
           }
         })
-      })
+      });
+
+      //details produk
+      function format3 (id) {
+        return '<table id="myTable3" class="table dt-responsive table-bordered nowrap tabel" width="100%"><thead>'
+        +'<tr><th colspan="3" style="text-align:center;background:#ededed">Komposisi produk '+id+'</th>'
+        +'</tr><tr><th>Nama barang</th><th>Jumlah</th><th>Satuan</th></tr></thead>'
+        +'<tbody class="'+id+'"></tbody></table>';
+      }
+
+      //show details produk
+      $(document).ready(function(){
+        $(document).on('click', 'td button.details', function (){
+          var e = $(this).closest('div.tab-pane').find('select.pil');
+          var idcabang = e.children('option').filter(':selected').val();
+          var tr = $(this).closest('tr');
+          var row = dtable.row(tr);
+          var id = tr.prop('id');
+          $.ajax({
+            url:'<?php echo site_url('data/detailproduk/');?>',
+            type : 'get',
+            data:{
+              'idcabang' : idcabang,
+              'idproduk' : id
+            },
+            success: function(data){
+              $('.'+id).html(data);
+            }
+          });
+          if (row.child.isShown()) {
+              // This row is already open - close it
+              row.child.hide();
+              tr.removeClass('shown');
+          }
+          else {
+              // Open this row
+              row.child(format3(id)).show();
+              tr.addClass('shown');
+          }
+        });
+      });
 	</script>
 </body>
 <?php

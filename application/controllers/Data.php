@@ -26,8 +26,8 @@ class Data extends CI_Controller{
 		echo '<tr id="'.$d->id.'" name="barangclient"><td>'.$no++.'</td>
 		  <td title="Kolom ini tidak bisa diedit" class="idbarang" id="idbarang">'.$d->idbarang.'</td>
 		  <td title="Double click untuk edit and tekan Enter untuk menyimpan" class="edit nama" id="nama">'.$d->nama.'</td>
-		  <td title="Double click untuk edit and tekan Enter untuk menyimpan" class="edit harga" id="harga"> Rp. '.$d->harga.'</td>
-		  <td title="Kolom ini tidak bisa diedit" class="stok" id="">'.$d->stok.'</td>
+		  <td title="Double click untuk edit and tekan Enter untuk menyimpan" class="edit harga" id="harga"> Rp. '.number_format($d->harga,2,",",".").'</td>
+		  <td title="Kolom ini tidak bisa diedit" class="stok" id="">'.str_replace('.',',',($d->stok*1)).'</td>
 		  <td title="Kolom ini tidak bisa diedit" class="satuan" id="">'.$d->satuan.'</td>
 		  <td><button class="btn btn-default btn-sm setting" ><i class="fa fa-cogs"></i> Pengaturan</button></td>
 		  <td><button class="btn btn-danger btn-xs hapus" name="'.$d->id.'"><i class="fa fa-remove"></i></button></td></tr>';
@@ -42,8 +42,8 @@ class Data extends CI_Controller{
 		echo '<tr id="'.$da->idproduk.'" name="produkclient"><td>'.$no++.'</td>
 		  <td title="Kolom ini tidak bisa diedit" class="idbarang" id="idproduk">'.$da->idproduk.'</td>
 		  <td title="Double click untuk edit and tekan Enter untuk menyimpant" class="edit nama" id="nama">'.$da->nama.'</td>
-		  <td title="Double click untuk edit and tekan Enter untuk menyimpan" class="edit" id="harga"> Rp. '.$da->harga.'</td>
-		  <td title="Kolom ini tidak bisa diedit" class="" id="stok">'.$da->stok.'</td>
+		  <td title="Double click untuk edit and tekan Enter untuk menyimpan" class="edit" id="harga"> Rp. '.number_format($da->harga,2,",",".").'</td>Rp.
+		  <td title="Kolom ini tidak bisa diedit" class="" id="stok">'.str_replace('.',',',($da->stok*1)).'</td>
 			<td><button class="btn btn-default btn-sm details" id=""><i class="fa fa-info-circle"></i>  &nbsp;details</button></td>
 		  <td><button class="btn btn-danger btn-xs hapus" name="'.$da->id.'"><i class="fa fa-remove"></i></button></td></tr>';
 		}
@@ -148,7 +148,7 @@ class Data extends CI_Controller{
     $output ='';
     foreach ($hasil as $h) {
       $output .= '<tr><td>'.$h->nama.'</td>';
-      $output .= '<td>'.$h->jumlah.'</td>';
+      $output .= '<td>'.str_replace('.',',',($h->jumlah*1)).'</td>';
       $output .= '<td>'.$h->satuan.'</td>';
       $output .= '</tr>';
     }
@@ -166,27 +166,32 @@ class Data extends CI_Controller{
 		$satuan = $this->input->post('satuan',true);
 		$harga = $this->input->post('harga',true);
 		$jumlah = $stok*$jml;
-		$harga = $harga/$jml;
-		$where = array('idcabang' => $id, 'idbarang' => $idbarang );
-		$update = array('stok' => $jumlah, 'satuan' => $satuan, 'harga' => $harga, 'flag' => 0, 'cons' => $jml);
-		$this->mdata->update($where,$update,'barangclient');
+		$harga2 = $harga/$jml;
+		$wh = array('idcabang' => $id, 'idbarang' => $idbarang, 'flag' => 1);
+		$where = array('idcabang' => $id, 'idbarang' => $idbarang);
+		if($this->mdata->tampil_where('barangclient',$wh)->num_rows() > 0){
+			$update = array('stok' => str_replace(',','.',$jumlah), 'satuan' => $satuan, 'harga' => $harga2, 'flag' => 0, 'cons' => $jml);
+			$this->mdata->update($where,$update,'barangclient');
 
-		$hasil = $this->mdata->tampil_where('produkclient_details',$where)->result();
-		foreach ($hasil as $h) {
-			$update2 = array('jumlah' => $h->jumlah*$jml);
-			$where2 = array('idcabang' => $id, 'idbarang' => $idbarang, 'idproduk' => $h->idproduk);
-			$this->mdata->update(array('idproduk' => $h->idproduk),array('flag' => 0), 'produkclient');
-			$this->mdata->update($where2,$update2,'produkclient_details');
+			$hasil = $this->mdata->tampil_where('produkclient_details',$where)->result();
+			foreach ($hasil as $h) {
+				$update2 = array('jumlah' => str_replace(',','.',$h->jumlah*$jml));
+				$where2 = array('idcabang' => $id, 'idbarang' => $idbarang, 'idproduk' => $h->idproduk);
+				$this->mdata->update(array('idproduk' => $h->idproduk),array('flag' => 0), 'produkclient');
+				$this->mdata->update($where2,$update2,'produkclient_details');
+			}
+			if ($this->db->trans_status() === FALSE)
+			{
+							$this->db->trans_rollback();
+			}
+			else
+			{
+							$this->db->trans_commit();
+			}
+			echo json_encode(array("status" => TRUE, 'pesan' => 'Satuan berhasil dikonversi '));
+		}else {
+			echo json_encode(array("status" => TRUE, 'pesan' => 'Gagal mengkonversi barang. Konversi sebelumnya belum diterima oleh client'));
 		}
-		if ($this->db->trans_status() === FALSE)
-		{
-						$this->db->trans_rollback();
-		}
-		else
-		{
-						$this->db->trans_commit();
-		}
-		echo json_encode(array("status" => TRUE, 'pesan' => 'Satuan berhasil dikonversi '));
 	}
 
 	function komposisi()
@@ -385,7 +390,27 @@ class Data extends CI_Controller{
 	{
 		$id = $this->input->get('idbarang',true);
 		$where = array('idbarang' => $id);
-		$data = $this->mdata->tampil_where('barang', $where)->result();
-		echo '<input name="satuan[]" value="'.$data[0]->satuan.'" id="" class="form-control" type="text" readOnly><input name="harga[]" id="" value="'.$data[0]->harga.'" class="form-control" type="hidden">';
+		if($this->mdata->tampil_where('barang', $where)->num_rows() > 0){
+			$data = $this->mdata->tampil_where('barang', $where)->result();
+			echo '<input name="satuan[]" value="'.$data[0]->satuan.'" id="" class="form-control" type="text" readOnly><input name="harga[]" id="" value="'.$data[0]->harga.'" class="form-control" type="hidden">';
+		}else {
+			echo '<input name="satuan[]" value="" id="" class="form-control" type="text" placeholder="Satuan Barang" readOnly>';
+		}
+	}
+
+	function cekbarang()
+	{
+		$idb = $this->input->get('pil',true);
+		$jml = $this->input->get('jml',true);
+		$n = count($idb);
+		for ($i=0; $i < $n; $i++) {
+			$where = array(
+				'idbarang' => $idb[$i],
+				'stok >=' => $jml[$i]
+			);
+			$output[] = $this->mdata->tampil_where('barang',$where)->num_rows();
+		}
+
+		echo json_encode($output);
 	}
 }

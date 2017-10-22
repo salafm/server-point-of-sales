@@ -174,10 +174,11 @@ include 'header.php'
                           <thead>
                             <tr>
                               <th>No. </th>
-                              <th>ID Transaksi</th>
+                              <th>ID Manifest</th>
                               <th>Cabang Tujuan</th>
                               <th>Deskripsi</th>
-                              <th>Waktu Transaksi</th>
+                              <th>Waktu Dikirim</th>
+                              <th>Waktu Diterima</th>
                               <th>Info Detail</th>
                             </tr>
                           </thead>
@@ -196,6 +197,8 @@ include 'header.php'
                                 class="desk" id=""><?php echo $bk->deskripsi?></td>
                                 <td title="Kolom ini tidak bisa diedit"
                                 class="" id=""><?php echo strftime("%A, %d/%m/%Y : %T", strtotime($bk->tanggal)); ?></td>
+                                <td title="Kolom ini tidak bisa diedit"
+                                class="" id=""><?php if($bk->last != ''){echo strftime("%A, %d/%m/%Y : %T", strtotime($bk->last));}else{ echo 'Belum Diterima';} ?></td>
                                 <td><button class="btn btn-default btn-sm details" id="">
                                 <i class="fa fa-info-circle"></i>  &nbsp;details</button></td>
                                 </tr>
@@ -251,7 +254,7 @@ include 'header.php'
               </div>
               <div class="form-group">
                 <label class="control-label col-md-3" style="padding-left:3px">Harga</label>
-                <div class="col-md-7">
+                <div class="col-md-7 colharga">
                   <input name="harga[]" id="harga" placeholder="Harga Satuan" class="form-control" type="text" title="Hanya angka diperbolehkan" pattern="^[1-9][0-9]{0,11}$" maxlength="11" autocomplete="off" required>
                 </div>
               </div>
@@ -497,7 +500,7 @@ include 'header.php'
       +'<div class="form-group"><label class="control-label col-md-3">Nama Barang</label><div class="col-md-7">'
       +'<input type="text" name="nama[]" value="" placeholder="Masukkan nama barang" class="form-control barang" autocomplete="on" title="Minimal 5 karakter, maksimal 30 karakter. Karakter spesial diperbolehkan" pattern="^.{5,30}$" type="text" minlength="3" maxlength="30" required>'
       +'<input type="hidden" name="pil[]" value="" class="isiid"><div class="daftarbarang" id="daftarbarang"></div></div></div>'
-      +'<div class="form-group"><label class="control-label col-md-3" style="padding-left:3px">Harga</label><div class="col-md-7"><input name="harga[]" id="harga" placeholder="Harga Satuan" class="form-control" type="text" title="Hanya angka diperbolehkan" pattern="^[1-9][0-9]{0,11}$" maxlength="11" autocomplete="off" required></div></div>'
+      +'<div class="form-group"><label class="control-label col-md-3" style="padding-left:3px">Harga</label><div class="col-md-7 colharga"><input name="harga[]" id="harga" placeholder="Harga Satuan" class="form-control" type="text" title="Hanya angka diperbolehkan" pattern="^[1-9][0-9]{0,11}$" maxlength="11" autocomplete="off" required></div></div>'
       +'<div class="form-group"><label class="control-label col-md-3">Jumlah</label><div class="col-md-3"><input name="jml[]" id="jml" placeholder="Jumlah barang" class="form-control" type="text" title="Hanya angka diperbolehkan" pattern="^[1-9][0-9]{0,11}$" maxlength="11" autocomplete="off" required></div>'
       +'<label class="control-label col-md-1" style="padding-left:3px">Satuan</label><div class="col-md-3 colsatuan" id=""><input name="satuan[]" value="" class="form-control satuan" id="" type="text" disabled></div>'
       +'<div class="col-md-1"><a class="btn btn-primary btn-sm plus" id="'+idbaru+'"><i class="fa fa-plus"></i></a></div>'
@@ -810,6 +813,12 @@ include 'header.php'
       				$('#'+idroot+' div.colsatuan').html(data);
       			}
       		});
+          $.get({
+            url : '<?php echo site_url('gudang/hargabarang/');?>'+id,
+            success : function(data){
+              $('#'+idroot+' div.colharga').html(data);
+            }
+          });
         }
         });
       });

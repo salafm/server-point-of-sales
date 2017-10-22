@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: 13 Okt 2017 pada 19.25
+-- Generation Time: 22 Okt 2017 pada 13.36
 -- Versi Server: 10.1.16-MariaDB
 -- PHP Version: 7.0.9
 
@@ -73,7 +73,6 @@ CREATE TABLE `barang` (
   `satuan` varchar(15) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-
 -- --------------------------------------------------------
 
 --
@@ -86,12 +85,11 @@ CREATE TABLE `barangclient` (
   `idbarang` varchar(10) NOT NULL,
   `nama` varchar(30) NOT NULL,
   `harga` int(11) UNSIGNED NOT NULL,
-  `stok` int(11) UNSIGNED NOT NULL DEFAULT '0',
+  `stok` decimal(10,3) UNSIGNED NOT NULL DEFAULT '0.000',
   `satuan` varchar(15) NOT NULL,
   `flag` int(1) UNSIGNED NOT NULL DEFAULT '0',
   `cons` decimal(10,5) UNSIGNED NOT NULL DEFAULT '1.00000'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
 
 --
 -- Trigger `barangclient`
@@ -117,8 +115,6 @@ CREATE TABLE `barangkeluar` (
   `tanggal` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ;
 
-
-
 -- --------------------------------------------------------
 
 --
@@ -128,18 +124,17 @@ CREATE TABLE `barangkeluar` (
 CREATE TABLE `barangkeluar_details` (
   `id` int(11) NOT NULL,
   `idtransaksi` varchar(12) NOT NULL,
-  `idproduk` varchar(10) NOT NULL,
+  `idbarang` varchar(10) NOT NULL,
   `harga` int(11) UNSIGNED DEFAULT '0',
-  `jumlah` int(11) UNSIGNED NOT NULL
+  `jumlah` int(11) UNSIGNED NOT NULL,
+  `satuan` varchar(15) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-
 
 --
 -- Trigger `barangkeluar_details`
 --
 DELIMITER $$
-CREATE TRIGGER `minus_stok` BEFORE INSERT ON `barangkeluar_details` FOR EACH ROW UPDATE barang INNER JOIN produk_details ON produk_details.idbarang = barang.idbarang SET stok = stok - (jumlah*NEW.jumlah) WHERE idproduk = NEW.idproduk
+CREATE TRIGGER `minus_stok` BEFORE INSERT ON `barangkeluar_details` FOR EACH ROW UPDATE barang SET stok = stok - NEW.jumlah WHERE idbarang = NEW.idbarang
 $$
 DELIMITER ;
 
@@ -156,8 +151,6 @@ CREATE TABLE `barangmasuk` (
   `tanggal` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ;
 
-
-
 -- --------------------------------------------------------
 
 --
@@ -172,7 +165,6 @@ CREATE TABLE `barangmasuk_details` (
   `jumlah` int(5) UNSIGNED NOT NULL,
   `satuan` varchar(15) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
 
 --
 -- Trigger `barangmasuk_details`
@@ -201,7 +193,6 @@ CREATE TABLE `cabang` (
   `dibuat` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ;
 
-
 -- --------------------------------------------------------
 
 --
@@ -214,8 +205,6 @@ CREATE TABLE `deleted` (
   `kolom` varchar(10) NOT NULL,
   `idkolom` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-
 
 -- --------------------------------------------------------
 
@@ -238,7 +227,6 @@ CREATE TABLE `logs` (
   `tanggal` datetime DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
 -- --------------------------------------------------------
 
 --
@@ -255,7 +243,6 @@ CREATE TABLE `petugas` (
   `last` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ;
 
-
 -- --------------------------------------------------------
 
 --
@@ -267,10 +254,8 @@ CREATE TABLE `produk` (
   `idproduk` varchar(10) NOT NULL,
   `nama` varchar(30) NOT NULL,
   `harga` int(11) UNSIGNED DEFAULT '0',
-  `kategori` varchar(10) NOT NULL DEFAULT '-',
   `tanggal` datetime(6) DEFAULT CURRENT_TIMESTAMP
 ) ;
-
 
 -- --------------------------------------------------------
 
@@ -284,11 +269,9 @@ CREATE TABLE `produkclient` (
   `nama` varchar(30) NOT NULL,
   `idcabang` int(11) UNSIGNED NOT NULL,
   `harga` int(11) UNSIGNED NOT NULL,
-  `kategori` varchar(10) NOT NULL DEFAULT '-',
   `stok` int(11) UNSIGNED NOT NULL DEFAULT '0',
   `flag` int(1) UNSIGNED NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
 
 --
 -- Trigger `produkclient`
@@ -310,9 +293,8 @@ CREATE TABLE `produkclient_details` (
   `idcabang` int(11) UNSIGNED NOT NULL,
   `idproduk` varchar(10) NOT NULL,
   `idbarang` varchar(10) NOT NULL,
-  `jumlah` int(11) UNSIGNED NOT NULL
+  `jumlah` decimal(10,3) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
 
 -- --------------------------------------------------------
 
@@ -326,30 +308,6 @@ CREATE TABLE `produk_details` (
   `idbarang` varchar(10) NOT NULL,
   `jumlah` int(11) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data untuk tabel `produk_details`
---
-
-INSERT INTO `produk_details` (`id`, `idproduk`, `idbarang`, `jumlah`) VALUES
-(3, 'prod002', 'kentang01', 1),
-(4, 'prod002', 'minyak01', 1),
-(15, 'prod003', 'cocacola01', 2),
-(16, 'prod003', 'balok01', 1),
-(17, 'prod004', '00150', 1),
-(18, 'prod004', '0002', 1),
-(19, 'prood05', 'jamur001', 1),
-(20, 'prood05', 'minyak01', 1),
-(21, 'prood06', 'broko01', 1),
-(22, 'prood06', 'minyak01', 1),
-(23, 'prood07', 'balok01', 1),
-(24, 'prood07', 'jeruk01', 2),
-(25, 'prood08', '0005', 1),
-(26, 'prood09', 'gelas01', 1),
-(27, 'prood010', 'coba001', 1),
-(28, 'prood011', '0006', 1),
-(29, 'prood012', '00190', 1),
-(30, 'prod001', 'chiki01', 1);
 
 --
 -- Indexes for dumped tables
@@ -441,17 +399,17 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT for table `apikeys`
 --
 ALTER TABLE `apikeys`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `barang`
 --
 ALTER TABLE `barang`
-  MODIFY `id` smallint(6) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` smallint(6) UNSIGNED NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `barangclient`
 --
 ALTER TABLE `barangclient`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `barangkeluar`
 --
@@ -461,7 +419,7 @@ ALTER TABLE `barangkeluar`
 -- AUTO_INCREMENT for table `barangkeluar_details`
 --
 ALTER TABLE `barangkeluar_details`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `barangmasuk`
 --
@@ -471,7 +429,7 @@ ALTER TABLE `barangmasuk`
 -- AUTO_INCREMENT for table `barangmasuk_details`
 --
 ALTER TABLE `barangmasuk_details`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=78;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `cabang`
 --
@@ -481,12 +439,12 @@ ALTER TABLE `cabang`
 -- AUTO_INCREMENT for table `deleted`
 --
 ALTER TABLE `deleted`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `logs`
 --
 ALTER TABLE `logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2984;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `petugas`
 --
@@ -501,17 +459,17 @@ ALTER TABLE `produk`
 -- AUTO_INCREMENT for table `produkclient`
 --
 ALTER TABLE `produkclient`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `produkclient_details`
 --
 ALTER TABLE `produkclient_details`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `produk_details`
 --
 ALTER TABLE `produk_details`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 --
 -- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
 --
@@ -520,7 +478,7 @@ ALTER TABLE `produk_details`
 -- Ketidakleluasaan untuk tabel `produkclient_details`
 --
 ALTER TABLE `produkclient_details`
-  ADD CONSTRAINT `FK_barangclient` FOREIGN KEY (`idcabang`,`idbarang`) REFERENCES `barangclient` (`idcabang`, `idbarang`) ON UPDATE NO ACTION,
+  ADD CONSTRAINT `FK_barangclient` FOREIGN KEY (`idcabang`,`idbarang`) REFERENCES `barangclient` (`idcabang`, `idbarang`) ON UPDATE CASCADE,
   ADD CONSTRAINT `FK_produkclient` FOREIGN KEY (`idcabang`,`idproduk`) REFERENCES `produkclient` (`idcabang`, `idproduk`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --

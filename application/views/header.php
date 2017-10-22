@@ -104,7 +104,7 @@
                   </li>
                   <li><a href="<?php echo site_url('gudang')?>" ><i class="fa fa-cubes"></i> Data Barang Gudang </a>
                   </li>
-                  <li><a href="<?php echo site_url('home/reset')?>" ><i class="fa fa-trash"></i> Reset Data Cabang </a></li>
+                  <!-- <li><a href="<?php echo site_url('home/reset')?>" ><i class="fa fa-trash"></i> Reset Data Cabang </a></li> -->
                 </ul>
               </div>
 
@@ -155,14 +155,14 @@
                   </ul>
                 </li>
 
-                <li role="presentation" class="dropdown">
+                <!-- <li role="presentation" class="dropdown">
                   <a href="" id="notifikasi" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
                     <i class="fa fa-envelope-o"></i>
                     <span id="notif" class=""></span>
                   </a>
                   <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
                   </ul>
-                </li>
+                </li> -->
               </ul>
             </nav>
           </div>
@@ -222,23 +222,23 @@
 		isFullscreen ? document.cancelFullScreen() : element.requestFullScreen();
 	}
 
-  $(function(){
-    $.ajax({
-      url:'<?php echo site_url('home/notifikasi') ?>',
-      type:'get',
-      dataType:'json',
-      success:function(data){
-        $('#menu1').html(data.isi);
-        $('#notif').html(data.notif);
-        $('#notif').attr('class',data.bubble);
-      }
-    });
-
-    $('#notifikasi').click(function(){
-      $('#notif').html('');
-      $('#notif').attr('class','');
-    });
-  });
+  // $(function(){
+  //   $.ajax({
+  //     url:'<?php echo site_url('home/notifikasi') ?>',
+  //     type:'get',
+  //     dataType:'json',
+  //     success:function(data){
+  //       $('#menu1').html(data.isi);
+  //       $('#notif').html(data.notif);
+  //       $('#notif').attr('class',data.bubble);
+  //     }
+  //   });
+  //
+  //   $('#notifikasi').click(function(){
+  //     $('#notif').html('');
+  //     $('#notif').attr('class','');
+  //   });
+  // });
 	</script>
 </body>
 </html>

@@ -146,6 +146,13 @@ class Gudang extends CI_Controller
     echo '<input name="satuan[]" id="" value="'.$data[0]->satuan.'" class="form-control satuan" type="text" title="Minimal 3 karakter, maksimal 15 karakter. Karakter spesial diperbolehkan" pattern="^.{3,15}$" readOnly minlength="3" maxlength="15" autocomplete="off" required>';
   }
 
+  function hargabarang($id)
+  {
+    $where = array('idbarang' => $id);
+    $data = $this->mdata->tampil_where('barang', $where)->result();
+    echo '<input name="harga[]" id="harga" placeholder="Harga Satuan" value="'.$data[0]->harga.'" class="form-control" type="text" title="Hanya angka diperbolehkan" pattern="^[1-9][0-9]{0,11}$" maxlength="11" autocomplete="off" required>';
+  }
+
   function search(){
     $cari = $this->input->post('nama',true);
     $hasil = $this->mdata->search($cari)->result();
